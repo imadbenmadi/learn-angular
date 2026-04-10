@@ -1,0 +1,12 @@
+<ng-container *ngIf="product; else notFound">
+  <h2>{{ product.name }}</h2>
+
+  <p>{{ product.description }}</p>
+  <p>Price: {{ product.price | currency }}</p>
+    <button type="button" (click)="addToCart(product)">Buy</button>
+
+</ng-container>
+
+<ng-template #notFound>
+  <p>Product not found.</p>
+</ng-template>
