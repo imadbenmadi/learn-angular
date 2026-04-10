@@ -1,0 +1,17 @@
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 620px;
+}
+
+.details h3 {
+    margin-bottom: 4px;
+}
+
+.actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}

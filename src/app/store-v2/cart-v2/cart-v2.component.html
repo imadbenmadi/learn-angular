@@ -1,0 +1,130 @@
+<!--
+  Cart page demonstrates:
+  - Observable data with async pipe
+  - Reactive form with validators
+  - ngIf/ngFor conditionals and loops
+-->
+<section class="cart-v2">
+    <h3>Cart + Reactive Form Checkout</h3>
+
+    <p>
+        This page focuses on Angular Reactive Forms with validation and submit
+        handling.
+    </p>
+
+    <ng-container *ngIf="items$ | async as items">
+        <p *ngIf="items.length === 0">
+            Your cart is empty. Add products from the catalog first.
+        </p>
+
+        <div
+            class="cart-item"
+            *ngFor="let item of items; trackBy: trackByCartItem"
+        >
+            <span>{{ item.name }} ({{ item.price | currency }})</span>
+            <button
+                type="button"
+                class="button fancy-button"
+                (click)="removeItem(item.id)"
+            >
+                Remove one
+            </button>
+        </div>
+    </ng-container>
+
+    <p><strong>Total:</strong> {{ (total$ | async) ?? 0 | currency }}</p>
+
+    <form [formGroup]="checkoutForm" (ngSubmit)="submitOrder()">
+        <div>
+            <label for="fullName">Full Name</label>
+            <input id="fullName" type="text" formControlName="fullName" />
+            <small
+                *ngIf="
+                    fullNameControl.touched &&
+                    fullNameControl.errors?.['required']
+                "
+            >
+                Full name is required.
+            </small>
+            <small
+                *ngIf="
+                    fullNameControl.touched &&
+                    fullNameControl.errors?.['minlength']
+                "
+            >
+                Full name must be at least 3 characters.
+            </small>
+        </div>
+
+        <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" />
+            <small
+                *ngIf="
+                    emailControl.touched && emailControl.errors?.['required']
+                "
+            >
+                Email is required.
+            </small>
+            <small
+                *ngIf="emailControl.touched && emailControl.errors?.['email']"
+            >
+                Enter a valid email address.
+            </small>
+        </div>
+
+        <div>
+            <label for="address">Address</label>
+            <input id="address" type="text" formControlName="address" />
+            <small
+                *ngIf="
+                    addressControl.touched &&
+                    addressControl.errors?.['required']
+                "
+            >
+                Address is required.
+            </small>
+            <small
+                *ngIf="
+                    addressControl.touched &&
+                    addressControl.errors?.['minlength']
+                "
+            >
+                Address must be at least 10 characters.
+            </small>
+        </div>
+
+        <fieldset>
+            <legend>Shipping Type</legend>
+            <label>
+                <input
+                    type="radio"
+                    value="standard"
+                    formControlName="shippingType"
+                />
+                Standard (free)
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    value="express"
+                    formControlName="shippingType"
+                />
+                Express (+$15)
+            </label>
+        </fieldset>
+
+        <div>
+            <label for="notes">Notes (optional)</label>
+            <input id="notes" type="text" formControlName="notes" />
+        </div>
+
+        <button type="submit" [disabled]="(hasItems$ | async) !== true">
+            Place Order
+        </button>
+    </form>
+
+    <p class="success" *ngIf="orderPlaced">
+        Order placed. Great job, you completed a reactive form flow.
+    </p>
+</section>

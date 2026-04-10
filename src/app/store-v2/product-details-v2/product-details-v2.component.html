@@ -1,0 +1,41 @@
+<!--
+  Product details page demonstrates:
+  - Reading route parameter (:id)
+  - Loading data through service stream
+  - Conditional template rendering with ngIf + ng-template
+-->
+<section
+    class="details"
+    *ngIf="product$ | async as product; else missingProduct"
+>
+    <h3>{{ product.name }}</h3>
+
+    <p>{{ product.description }}</p>
+
+    <p><strong>Price:</strong> {{ product.price | currency }}</p>
+    <p><strong>Rating:</strong> {{ product.rating }}/5</p>
+    <p><strong>Stock:</strong> {{ product.inStock | stockLevel }}</p>
+
+    <p><strong>Tags:</strong> {{ product.tags.join(", ") }}</p>
+
+    <div class="actions">
+        <button
+            type="button"
+            (click)="addToCart(product)"
+            [disabled]="product.inStock === 0"
+        >
+            Add to cart
+        </button>
+        <a class="button fancy-button" routerLink="/store-v2"
+            >Back to catalog</a
+        >
+    </div>
+</section>
+
+<ng-template #missingProduct>
+    <p>
+        We could not find that product. It may have been removed or the URL id
+        is invalid.
+    </p>
+    <a class="button" routerLink="/store-v2">Back to catalog</a>
+</ng-template>

@@ -1,0 +1,68 @@
+[
+    {
+        "id": 101,
+        "name": "Pixel Pro Max",
+        "description": "Flagship phone with an excellent camera and battery life.",
+        "price": 999,
+        "category": "phone",
+        "inStock": 7,
+        "rating": 4.8,
+        "isFeatured": true,
+        "tags": ["camera", "5g", "oled"]
+    },
+    {
+        "id": 102,
+        "name": "Pixel Lite",
+        "description": "Affordable phone with a clean Android experience.",
+        "price": 499,
+        "category": "phone",
+        "inStock": 3,
+        "rating": 4.3,
+        "isFeatured": false,
+        "tags": ["budget", "battery"]
+    },
+    {
+        "id": 103,
+        "name": "NoiseBlock Headphones",
+        "description": "Wireless over-ear headphones with active noise cancelation.",
+        "price": 249,
+        "category": "audio",
+        "inStock": 11,
+        "rating": 4.6,
+        "isFeatured": true,
+        "tags": ["wireless", "anc", "travel"]
+    },
+    {
+        "id": 104,
+        "name": "FitBand Ultra",
+        "description": "Lightweight wearable with heart-rate and sleep tracking.",
+        "price": 179,
+        "category": "wearable",
+        "inStock": 0,
+        "rating": 4.1,
+        "isFeatured": false,
+        "tags": ["fitness", "health"]
+    },
+    {
+        "id": 105,
+        "name": "MagSafe Stand",
+        "description": "Magnetic stand for desktop charging and video calls.",
+        "price": 59,
+        "category": "accessory",
+        "inStock": 24,
+        "rating": 4.5,
+        "isFeatured": false,
+        "tags": ["charging", "desk"]
+    },
+    {
+        "id": 106,
+        "name": "Pocket Speaker",
+        "description": "Portable speaker with rich bass and USB-C charging.",
+        "price": 129,
+        "category": "audio",
+        "inStock": 4,
+        "rating": 4.4,
+        "isFeatured": true,
+        "tags": ["bluetooth", "portable"]
+    }
+]

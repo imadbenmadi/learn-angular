@@ -1,0 +1,110 @@
+<!--
+  Playground demonstrates:
+  - Template-driven forms (NgForm + ngModel)
+  - ngSwitch
+  - Built-in pipes (json, titlecase)
+-->
+<section class="playground">
+    <h3>Template-Driven Form Playground</h3>
+
+    <form #learningForm="ngForm" (ngSubmit)="submitTemplateForm(learningForm)">
+        <div>
+            <label for="learnerName">Your Name</label>
+            <input
+                id="learnerName"
+                name="learnerName"
+                required
+                minlength="2"
+                [(ngModel)]="learnerName"
+            />
+            <small
+                *ngIf="
+                    learningForm.submitted &&
+                    learningForm.controls['learnerName']?.invalid
+                "
+            >
+                Name should be at least 2 characters.
+            </small>
+        </div>
+
+        <div>
+            <label for="favoriteTopic">Favorite Topic</label>
+            <select
+                id="favoriteTopic"
+                name="favoriteTopic"
+                [(ngModel)]="favoriteTopic"
+            >
+                <option *ngFor="let topic of topics" [value]="topic">
+                    {{ topic | titlecase }}
+                </option>
+            </select>
+        </div>
+
+        <fieldset>
+            <legend>Experience Level (ngSwitch target)</legend>
+            <label>
+                <input
+                    type="radio"
+                    name="experienceLevel"
+                    value="beginner"
+                    [(ngModel)]="experienceLevel"
+                />
+                Beginner
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    name="experienceLevel"
+                    value="intermediate"
+                    [(ngModel)]="experienceLevel"
+                />
+                Intermediate
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    name="experienceLevel"
+                    value="advanced"
+                    [(ngModel)]="experienceLevel"
+                />
+                Advanced
+            </label>
+        </fieldset>
+
+        <div>
+            <label>
+                <input
+                    type="checkbox"
+                    name="wantsNewsletter"
+                    [(ngModel)]="wantsNewsletter"
+                />
+                Subscribe to weekly Angular learning tips
+            </label>
+        </div>
+
+        <div>
+            <label for="notes">Notes</label>
+            <input id="notes" name="notes" [(ngModel)]="notes" />
+        </div>
+
+        <button type="submit">Save Learning Profile</button>
+    </form>
+
+    <p class="success" *ngIf="submittedMessage">{{ submittedMessage }}</p>
+
+    <h4>ngSwitch Example</h4>
+    <div [ngSwitch]="experienceLevel">
+        <p *ngSwitchCase="'beginner'">
+            Beginner plan: components, template syntax, and data binding.
+        </p>
+        <p *ngSwitchCase="'intermediate'">
+            Intermediate plan: forms, routing, and services.
+        </p>
+        <p *ngSwitchDefault>
+            Advanced plan: RxJS streams, guards, and architecture patterns.
+        </p>
+    </div>
+
+    <h4>Live Form Value (json pipe)</h4>
+    <pre>{{ learningForm.value | json }}</pre>
+</section>

@@ -1,0 +1,61 @@
+<!--
+  Catalog page demonstrates:
+  - ngModel for inputs
+  - async pipe for observables
+  - ngFor rendering
+  - parent-child communication with @Output
+-->
+<section class="catalog">
+    <h3>Product Catalog</h3>
+    <p>
+        Filter products and add them to cart. This page uses RxJS streams with
+        Angular templates.
+    </p>
+
+    <div class="catalog-actions">
+        <a class="button" routerLink="/store-v2/cart">
+            Open Cart ({{ (cartCount$ | async) ?? 0 }})
+        </a>
+        <a class="button fancy-button" routerLink="/store-v2/playground">
+            Open Learning Playground
+        </a>
+    </div>
+
+    <div class="filters">
+        <div>
+            <label for="search">Search products</label>
+            <input
+                id="search"
+                type="text"
+                [ngModel]="searchTerm"
+                (ngModelChange)="setSearchTerm($event)"
+                placeholder="Try: camera, wearable, wireless"
+            />
+        </div>
+
+        <div>
+            <label for="category">Category</label>
+            <select
+                id="category"
+                [ngModel]="selectedCategory"
+                (ngModelChange)="setCategory($event)"
+            >
+                <option *ngFor="let category of categories" [value]="category">
+                    {{ category | titlecase }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <ng-container *ngIf="filteredProducts$ | async as products">
+        <p *ngIf="products.length === 0">No products matched your filters.</p>
+
+        <div class="catalog-grid">
+            <app-product-tile
+                *ngFor="let product of products; trackBy: trackByProductId"
+                [product]="product"
+                (add)="addToCart($event)"
+            ></app-product-tile>
+        </div>
+    </ng-container>
+</section>

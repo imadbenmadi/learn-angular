@@ -1,0 +1,38 @@
+.product-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 240px;
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.product-header h4 {
+    margin: 0;
+}
+
+.tags {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.tags li {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background-color: #e3f2fd;
+}
+
+.actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+}

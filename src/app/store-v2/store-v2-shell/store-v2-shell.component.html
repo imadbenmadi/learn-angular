@@ -1,0 +1,32 @@
+<!--
+  Store V2 shell:
+  - Contains feature title
+  - Contains local feature navigation
+  - Renders child routes with router-outlet
+-->
+<section class="store-v2-layout">
+    <header class="store-v2-header">
+        <h2>Store V2 Learning Lab</h2>
+        <p>Practice Angular v15 concepts with commented code examples.</p>
+    </header>
+
+    <nav class="store-v2-nav">
+        <a
+            routerLink="/store-v2"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+        >
+            Catalog
+        </a>
+        <a routerLink="/store-v2/cart" routerLinkActive="active">
+            Cart + Reactive Forms
+        </a>
+        <a routerLink="/store-v2/playground" routerLinkActive="active">
+            Template Forms Playground
+        </a>
+    </nav>
+
+    <main class="store-v2-content">
+        <router-outlet></router-outlet>
+    </main>
+</section>

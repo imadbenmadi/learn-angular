@@ -1,0 +1,45 @@
+<!--
+  Product tile demonstrates:
+  - custom directive: [appSpotlight]
+  - custom pipe: stockLevel
+  - @Input for data
+  - @Output event for actions
+-->
+<article class="product-tile" [appSpotlight]="product.inStock">
+    <div class="product-header">
+        <h4>{{ product.name }}</h4>
+        <strong>{{ product.price | currency }}</strong>
+    </div>
+
+    <p>{{ product.description }}</p>
+
+    <p>
+        Category: {{ product.category | titlecase }} | Rating:
+        {{ product.rating }}/5
+    </p>
+
+    <p>
+        Status: {{ product.inStock | stockLevel }}
+        <span *ngIf="product.isFeatured"> | Featured</span>
+    </p>
+
+    <ul class="tags">
+        <li *ngFor="let tag of product.tags">#{{ tag }}</li>
+    </ul>
+
+    <div class="actions">
+        <a
+            class="button fancy-button"
+            [routerLink]="['/store-v2/product', product.id]"
+        >
+            Details
+        </a>
+        <button
+            type="button"
+            (click)="onAddClicked()"
+            [disabled]="product.inStock === 0"
+        >
+            Add to cart
+        </button>
+    </div>
+</article>
