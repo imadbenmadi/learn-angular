@@ -1,0 +1,25 @@
+.store-v3-layout {
+    padding: 16px;
+}
+
+.store-v3-header {
+    margin-bottom: 12px;
+}
+
+.store-v3-nav {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.store-v3-nav a {
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.store-v3-nav a.active {
+    font-weight: 600;
+}

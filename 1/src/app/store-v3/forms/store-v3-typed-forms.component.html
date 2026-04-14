@@ -1,0 +1,80 @@
+<section class="forms">
+    <h3>Typed Reactive Forms</h3>
+    <p>
+        This page demonstrates:
+        <strong>typed reactive forms</strong>, a <strong>custom validator</strong>,
+        and a <strong>custom form control</strong> (ControlValueAccessor).
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>
+            Full name
+            <input formControlName="fullName" />
+        </label>
+        <div class="error" *ngIf="fullName.touched && fullName.invalid">
+            <div *ngIf="fullName.errors?.['required']">Name is required.</div>
+            <div *ngIf="fullName.errors?.['minlength']">
+                Name must be at least 3 characters.
+            </div>
+        </div>
+
+        <label>
+            Email
+            <input formControlName="email" />
+        </label>
+        <div class="error" *ngIf="email.touched && email.invalid">
+            <div *ngIf="email.errors?.['required']">Email is required.</div>
+            <div *ngIf="email.errors?.['email']">Email is invalid.</div>
+        </div>
+
+        <label>
+            Address
+            <textarea formControlName="address"></textarea>
+        </label>
+        <div class="error" *ngIf="address.touched && address.invalid">
+            <div *ngIf="address.errors?.['required']">Address is required.</div>
+            <div *ngIf="address.errors?.['minlength']">
+                Address must be at least 10 characters.
+            </div>
+        </div>
+
+        <label>
+            Rating
+            <app-stars-rating-control formControlName="rating"></app-stars-rating-control>
+        </label>
+        <div class="error" *ngIf="rating.touched && rating.invalid">
+            Pick a rating (1-5).
+        </div>
+
+        <label>
+            Coupon (optional)
+            <input formControlName="coupon" placeholder="SAVE-1234" />
+        </label>
+        <div class="error" *ngIf="coupon.touched && coupon.invalid">
+            {{ coupon.errors?.['couponFormat'] }}
+        </div>
+
+        <label class="checkbox">
+            <input type="checkbox" formControlName="acceptTerms" />
+            I accept the terms
+        </label>
+        <div class="error" *ngIf="acceptTerms.touched && acceptTerms.invalid">
+            You must accept the terms.
+        </div>
+
+        <div class="buttons">
+            <button type="submit">Submit</button>
+            <button type="button" (click)="reset()">Reset</button>
+        </div>
+
+        <div class="success" *ngIf="submitted">
+            Form submitted successfully (demo).
+        </div>
+
+        <details>
+            <summary>Debug: current value</summary>
+            <pre>{{ form.getRawValue() | json }}</pre>
+            <pre>dirty={{ form.dirty }} pristine={{ form.pristine }}</pre>
+        </details>
+    </form>
+</section>

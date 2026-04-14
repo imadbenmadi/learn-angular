@@ -1,0 +1,35 @@
+form {
+    display: grid;
+    gap: 10px;
+    max-width: 640px;
+}
+
+label {
+    display: grid;
+    gap: 4px;
+}
+
+textarea {
+    min-height: 90px;
+}
+
+.checkbox {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.error {
+    color: #b00020;
+    font-size: 0.9em;
+}
+
+.success {
+    padding: 8px;
+    border: 1px solid #cce5cc;
+}

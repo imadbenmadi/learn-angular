@@ -1,0 +1,35 @@
+[
+    {
+        "id": 201,
+        "name": "Pixel Pro Max (V3)",
+        "description": "Same shape as V2 data, different IDs for V3 examples.",
+        "price": 999,
+        "category": "phone",
+        "inStock": 7,
+        "rating": 4.8,
+        "isFeatured": true,
+        "tags": ["camera", "5g", "oled"]
+    },
+    {
+        "id": 202,
+        "name": "NoiseBlock Headphones (V3)",
+        "description": "Wireless headphones used in resolver + HTTP examples.",
+        "price": 249,
+        "category": "audio",
+        "inStock": 11,
+        "rating": 4.6,
+        "isFeatured": true,
+        "tags": ["wireless", "anc", "travel"]
+    },
+    {
+        "id": 203,
+        "name": "FitBand Ultra (V3)",
+        "description": "Wearable used in typed forms + custom control examples.",
+        "price": 179,
+        "category": "wearable",
+        "inStock": 0,
+        "rating": 4.1,
+        "isFeatured": false,
+        "tags": ["fitness", "health"]
+    }
+]

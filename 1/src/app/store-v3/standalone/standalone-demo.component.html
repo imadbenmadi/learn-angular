@@ -1,0 +1,14 @@
+<section>
+    <h3>Standalone Route</h3>
+    <p>
+        This route is loaded via <code>loadComponent</code> (no module
+        declaration).
+    </p>
+
+    <button type="button" (click)="inc()">Clicks: {{ count }}</button>
+
+    <h4>Products stream</h4>
+    <ul *ngIf="products$ | async as products">
+        <li *ngFor="let p of products">{{ p.name }}</li>
+    </ul>
+</section>

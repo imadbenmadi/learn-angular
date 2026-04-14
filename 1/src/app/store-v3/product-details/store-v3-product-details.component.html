@@ -1,0 +1,21 @@
+<section *ngIf="product$ | async as product; else notFound">
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+
+    <div class="grid">
+        <div><strong>Price:</strong> ${{ product.price }}</div>
+        <div><strong>Category:</strong> {{ product.category }}</div>
+        <div><strong>In stock:</strong> {{ product.inStock }}</div>
+        <div><strong>Rating:</strong> {{ product.rating }}</div>
+    </div>
+
+    <p>
+        <a routerLink="/store-v3/overview">Back</a>
+    </p>
+</section>
+
+<ng-template #notFound>
+    <h3>Product not found</h3>
+    <p>The resolver could not find that product id.</p>
+    <p><a routerLink="/store-v3/overview">Back</a></p>
+</ng-template>

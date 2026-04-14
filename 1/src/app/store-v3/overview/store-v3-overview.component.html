@@ -1,0 +1,43 @@
+<section class="overview">
+    <h3>Overview</h3>
+    <p>
+        This page demonstrates <strong>OnPush</strong> change detection with
+        <strong>async pipe</strong>, plus a simple <strong>facade</strong> service
+        for state.
+    </p>
+
+    <div class="filters">
+        <label>
+            Search
+            <input
+                [value]="searchTerm"
+                (input)="setSearchTerm($any($event.target).value)"
+            />
+        </label>
+
+        <label>
+            Category
+            <select
+                [value]="selectedCategory"
+                (change)="setCategory($any($event.target).value)"
+            >
+                <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+            </select>
+        </label>
+    </div>
+
+    <ul class="products" *ngIf="filteredProducts$ | async as products">
+        <li *ngFor="let p of products; trackBy: trackByProductId">
+            <div class="product-row">
+                <div>
+                    <strong>{{ p.name }}</strong>
+                    <div class="muted">{{ p.description }}</div>
+                </div>
+                <div class="actions">
+                    <span>${{ p.price }}</span>
+                    <a [routerLink]="['/store-v3/product', p.id]">Details</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</section>

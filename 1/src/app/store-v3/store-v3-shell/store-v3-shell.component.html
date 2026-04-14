@@ -1,0 +1,31 @@
+<!--
+  Store V3 shell:
+  - Feature navigation
+  - Child route rendering via router-outlet
+-->
+<section class="store-v3-layout">
+    <header class="store-v3-header">
+        <h2>Store V3 Advanced Lab</h2>
+        <p>Angular v15 topics that go beyond Store V2.</p>
+    </header>
+
+    <nav class="store-v3-nav">
+        <a
+            routerLink="/store-v3/overview"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+        >
+            Overview + Facade + OnPush
+        </a>
+        <a routerLink="/store-v3/forms" routerLinkActive="active">
+            Typed Forms + Custom Control
+        </a>
+        <a routerLink="/store-v3/standalone" routerLinkActive="active">
+            Standalone Route (loadComponent)
+        </a>
+    </nav>
+
+    <main class="store-v3-content">
+        <router-outlet></router-outlet>
+    </main>
+</section>

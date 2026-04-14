@@ -21,6 +21,7 @@ import { LearningPlaygroundComponent } from "./store-v2/learning-playground/lear
 import { StockLevelPipe } from "./store-v2/shared/stock-level.pipe";
 import { SpotlightDirective } from "./store-v2/shared/spotlight.directive";
 import { StoreV2EnterGuard } from "./store-v2/guards/store-v2-enter.guard";
+import { STORE_V3_PRODUCTS_URL } from "./store-v3/tokens/store-v3.tokens";
 
 @NgModule({
     imports: [
@@ -56,6 +57,13 @@ import { StoreV2EnterGuard } from "./store-v2/guards/store-v2-enter.guard";
                     },
                 ],
             },
+            {
+                path: "store-v3",
+                loadChildren: () =>
+                    import("./store-v3/store-v3.module").then(
+                        (m) => m.StoreV3Module,
+                    ),
+            },
         ]),
     ],
     declarations: [
@@ -80,6 +88,10 @@ import { StoreV2EnterGuard } from "./store-v2/guards/store-v2-enter.guard";
             provide: HTTP_INTERCEPTORS,
             useClass: ApiLoggingInterceptor,
             multi: true,
+        },
+        {
+            provide: STORE_V3_PRODUCTS_URL,
+            useValue: "/assets/store-v3-products.json",
         },
     ],
     bootstrap: [AppComponent],

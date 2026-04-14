@@ -1,0 +1,20 @@
+.stars {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.stars button {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px 6px;
+    background: white;
+    cursor: pointer;
+}
+
+.stars button.filled {
+    font-weight: 700;
+}
+
+.stars.disabled {
+    opacity: 0.6;
+}

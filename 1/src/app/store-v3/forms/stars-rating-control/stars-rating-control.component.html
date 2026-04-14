@@ -1,0 +1,12 @@
+<div class="stars" [class.disabled]="disabled">
+    <button
+        type="button"
+        *ngFor="let s of stars()"
+        (click)="setValue(s)"
+        [disabled]="disabled"
+        [class.filled]="s <= value"
+        aria-label="Set rating"
+    >
+        ★
+    </button>
+</div>
