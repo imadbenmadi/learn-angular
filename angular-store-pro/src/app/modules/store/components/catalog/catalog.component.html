@@ -1,0 +1,101 @@
+<div class="catalog-container">
+    <div class="catalog-header">
+        <h1>Product Catalog</h1>
+        <p class="subtitle">Browse our professional collection</p>
+    </div>
+
+    <div class="catalog-layout">
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar">
+            <h3>Filters</h3>
+
+            <div class="filter-group">
+                <label for="search">Search</label>
+                <input
+                    id="search"
+                    type="text"
+                    [(ngModel)]="searchQuery"
+                    (keyup.enter)="search()"
+                    placeholder="Search products..."
+                />
+                <button (click)="search()" class="btn btn-primary btn-sm">
+                    Search
+                </button>
+            </div>
+
+            <div class="filter-group">
+                <label for="category">Category</label>
+                <select
+                    id="category"
+                    [(ngModel)]="selectedCategory"
+                    (change)="filterByCategory(selectedCategory)"
+                >
+                    <option value="">All Categories</option>
+                    <option *ngFor="let cat of categories" [value]="cat.slug">
+                        {{ cat.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="sort">Sort By</label>
+                <select
+                    id="sort"
+                    [(ngModel)]="sortBy"
+                    (change)="changeSortBy(sortBy)"
+                >
+                    <option value="name">Name (A-Z)</option>
+                    <option value="price-low">Price (Low to High)</option>
+                    <option value="price-high">Price (High to Low)</option>
+                    <option value="rating">Rating</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- Products Grid -->
+        <div class="products-section">
+            <div *ngIf="isLoading" class="loading">
+                <p>Loading products...</p>
+            </div>
+
+            <div
+                *ngIf="!isLoading && filteredProducts.length > 0"
+                class="products-grid"
+            >
+                <app-product-card
+                    *ngFor="let product of filteredProducts"
+                    [product]="product"
+                    (addToCart)="addToCart($event)"
+                ></app-product-card>
+            </div>
+
+            <div
+                *ngIf="!isLoading && filteredProducts.length === 0"
+                class="empty-state"
+            >
+                <p>No products found</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" *ngIf="getTotalPages() > 1">
+                <button
+                    (click)="previousPage()"
+                    [disabled]="currentPage === 1"
+                    class="btn btn-secondary btn-sm"
+                >
+                    Previous
+                </button>
+                <span class="page-info"
+                    >Page {{ currentPage }} of {{ getTotalPages() }}</span
+                >
+                <button
+                    (click)="nextPage()"
+                    [disabled]="currentPage === getTotalPages()"
+                    class="btn btn-secondary btn-sm"
+                >
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

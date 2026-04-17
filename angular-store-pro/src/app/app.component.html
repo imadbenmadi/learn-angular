@@ -1,0 +1,106 @@
+<header class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-brand">
+            <a routerLink="/" class="logo">
+                <span class="logo-icon">🛍️</span>
+                <span class="logo-text">ProStore</span>
+            </a>
+        </div>
+
+        <nav class="navbar-menu">
+            <a routerLink="/store" routerLinkActive="active">Catalog</a>
+            <a routerLink="/store/about" routerLinkActive="active">About</a>
+            <a
+                *ngIf="isAuthenticated$ | async as isAuth; else loginLink"
+                routerLink="/profile"
+                routerLinkActive="active"
+                >Profile</a
+            >
+            <ng-template #loginLink>
+                <a routerLink="/auth/login" routerLinkActive="active">Login</a>
+            </ng-template>
+        </nav>
+
+        <div class="navbar-actions">
+            <div
+                class="cart-icon"
+                routerLink="/store/cart"
+                routerLinkActive="active"
+                title="Shopping Cart"
+            >
+                <span class="icon">🛒</span>
+                <span class="badge" *ngIf="cartTotalItems$ | async as total">{{
+                    total
+                }}</span>
+            </div>
+
+            <div *ngIf="currentUser$ | async as user" class="user-menu">
+                <div class="user-avatar">{{ user.firstName.charAt(0) }}</div>
+                <div class="dropdown">
+                    <button (click)="toggleUserMenu()" class="dropdown-toggle">
+                        Menu
+                    </button>
+                    <div class="dropdown-menu" *ngIf="showUserMenu">
+                        <a routerLink="/profile">Profile</a>
+                        <a routerLink="/profile/orders">Orders</a>
+                        <a *ngIf="isAdmin$ | async" routerLink="/admin"
+                            >Admin Panel</a
+                        >
+                        <button (click)="logout()" class="btn-logout">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-content">
+    <router-outlet></router-outlet>
+</main>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h4>About</h4>
+            <ul>
+                <li><a href="#">About ProStore</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Customer Service</h4>
+            <ul>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping Info</a></li>
+                <li><a href="#">Returns</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#" class="social-icon">Facebook</a>
+                <a href="#" class="social-icon">Twitter</a>
+                <a href="#" class="social-icon">Instagram</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 ProStore. All rights reserved.</p>
+    </div>
+</footer>
