@@ -14,9 +14,9 @@ import { StoreV3ProductsService } from "../services/store-v3-products.service";
 @Injectable({
     providedIn: "root",
 })
-export class StoreV3ProductResolver
-    implements Resolve<StoreV3Product | undefined>
-{
+export class StoreV3ProductResolver implements Resolve<
+    StoreV3Product | undefined
+> {
     constructor(private productsService: StoreV3ProductsService) {}
 
     resolve(

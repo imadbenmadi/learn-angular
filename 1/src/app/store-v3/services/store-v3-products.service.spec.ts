@@ -15,7 +15,10 @@ describe("StoreV3ProductsService", () => {
             imports: [HttpClientTestingModule],
             providers: [
                 StoreV3ProductsService,
-                { provide: STORE_V3_PRODUCTS_URL, useValue: "/assets/test.json" },
+                {
+                    provide: STORE_V3_PRODUCTS_URL,
+                    useValue: "/assets/test.json",
+                },
             ],
         });
 

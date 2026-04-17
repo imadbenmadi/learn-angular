@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" routerLink="/tasks">Tasks Pro</a>
+
+        <ul
+            class="navbar-nav me-auto"
+            *ngIf="user$ | async as user; else loggedOut"
+        >
+            <li class="nav-item">
+                <a
+                    class="nav-link"
+                    routerLink="/tasks"
+                    routerLinkActive="active"
+                    >My Tasks</a
+                >
+            </li>
+        </ul>
+
+        <ng-template #loggedOut>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        routerLink="/auth/login"
+                        routerLinkActive="active"
+                        >Login</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        routerLink="/auth/register"
+                        routerLinkActive="active"
+                        >Register</a
+                    >
+                </li>
+            </ul>
+        </ng-template>
+
+        <div class="d-flex align-items-center" *ngIf="user$ | async as user">
+            <span class="text-white-50 me-3">{{ user.name }}</span>
+            <button
+                class="btn btn-outline-light btn-sm"
+                type="button"
+                (click)="logout()"
+            >
+                Logout
+            </button>
+        </div>
+    </div>
+</nav>

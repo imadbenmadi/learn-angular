@@ -2,8 +2,8 @@
     <h3>Overview</h3>
     <p>
         This page demonstrates <strong>OnPush</strong> change detection with
-        <strong>async pipe</strong>, plus a simple <strong>facade</strong> service
-        for state.
+        <strong>async pipe</strong>, plus a simple
+        <strong>facade</strong> service for state.
     </p>
 
     <div class="filters">
@@ -21,7 +21,9 @@
                 [value]="selectedCategory"
                 (change)="setCategory($any($event.target).value)"
             >
-                <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+                <option *ngFor="let c of categories" [value]="c">
+                    {{ c }}
+                </option>
             </select>
         </label>
     </div>

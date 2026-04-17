@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, combineLatest, map } from "rxjs";
-import { StoreV3Product, StoreV3Category } from "../models/store-v3-product.model";
+import {
+    StoreV3Product,
+    StoreV3Category,
+} from "../models/store-v3-product.model";
 import { StoreV3ProductsService } from "../services/store-v3-products.service";
 
 // A small "facade" service:

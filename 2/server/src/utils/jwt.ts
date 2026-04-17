@@ -1,0 +1,26 @@
+/**
+ * jwt.ts
+ * ------
+ * JWT helpers.
+ *
+ * This project uses a simple access-token-only flow to stay beginner friendly.
+ * In larger apps you often add refresh tokens.
+ */
+
+import jwt from "jsonwebtoken";
+
+import { env } from "../config/env";
+
+export interface AccessTokenPayload {
+    userId: number;
+}
+
+export function signAccessToken(payload: AccessTokenPayload): string {
+    return jwt.sign(payload, env.JWT_SECRET, {
+        expiresIn: env.JWT_EXPIRES_IN,
+    });
+}
+
+export function verifyAccessToken(token: string): AccessTokenPayload {
+    return jwt.verify(token, env.JWT_SECRET) as AccessTokenPayload;
+}

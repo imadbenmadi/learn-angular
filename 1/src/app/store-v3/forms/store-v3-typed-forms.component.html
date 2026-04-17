@@ -2,8 +2,9 @@
     <h3>Typed Reactive Forms</h3>
     <p>
         This page demonstrates:
-        <strong>typed reactive forms</strong>, a <strong>custom validator</strong>,
-        and a <strong>custom form control</strong> (ControlValueAccessor).
+        <strong>typed reactive forms</strong>, a
+        <strong>custom validator</strong>, and a
+        <strong>custom form control</strong> (ControlValueAccessor).
     </p>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -40,7 +41,9 @@
 
         <label>
             Rating
-            <app-stars-rating-control formControlName="rating"></app-stars-rating-control>
+            <app-stars-rating-control
+                formControlName="rating"
+            ></app-stars-rating-control>
         </label>
         <div class="error" *ngIf="rating.touched && rating.invalid">
             Pick a rating (1-5).
@@ -51,7 +54,7 @@
             <input formControlName="coupon" placeholder="SAVE-1234" />
         </label>
         <div class="error" *ngIf="coupon.touched && coupon.invalid">
-            {{ coupon.errors?.['couponFormat'] }}
+            {{ coupon.errors?.["couponFormat"] }}
         </div>
 
         <label class="checkbox">

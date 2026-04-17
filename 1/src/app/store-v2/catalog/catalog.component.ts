@@ -6,7 +6,7 @@ import {
 } from "../models/store-v2-product.model";
 import { StoreV2Service } from "../services/store-v2.service";
 
-type CatalogFilterCategory = "all" | StoreV2Category;
+type CatalogFilterCategoryOptions = "all" | StoreV2Category;
 
 @Component({
     selector: "app-catalog",
@@ -16,12 +16,12 @@ type CatalogFilterCategory = "all" | StoreV2Category;
 export class CatalogComponent {
     // Local state for ngModel inputs in the template.
     searchTerm = "";
-    selectedCategory: CatalogFilterCategory = "all";
+    selectedCategory: CatalogFilterCategoryOptions = "all";
 
     // Subjects represent the same state as streams so we can combine/filter reactively.
     private readonly searchTermSubject = new BehaviorSubject<string>("");
     private readonly categorySubject =
-        new BehaviorSubject<CatalogFilterCategory>("all");
+        new BehaviorSubject<CatalogFilterCategoryOptions>("all");
 
     // Product data stream comes from the service (HTTP + fallback).
     readonly products$ = this.storeV2Service.getProducts();
@@ -61,7 +61,7 @@ export class CatalogComponent {
     );
 
     // This drives the category select options.
-    readonly categories: CatalogFilterCategory[] = [
+    readonly categories: CatalogFilterCategoryOptions[] = [
         "all",
         "phone",
         "audio",
@@ -77,7 +77,7 @@ export class CatalogComponent {
     }
 
     setCategory(value: string): void {
-        const category = value as CatalogFilterCategory;
+        const category = value as CatalogFilterCategoryOptions;
         this.selectedCategory = category;
         this.categorySubject.next(category);
     }

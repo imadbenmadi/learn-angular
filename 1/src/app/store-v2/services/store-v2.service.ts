@@ -28,30 +28,6 @@ export class StoreV2Service {
         map((items) => items.reduce((sum, item) => sum + item.price, 0)),
     );
 
-    // shareReplay(1) caches the product list so we do not request it multiple times.
-    private readonly products$: Observable<StoreV2Product[]> = this.http
-        .get<StoreV2Product[]>("/assets/store-v2-products.json")
-        .pipe(
-            catchError(() => of(STORE_V2_PRODUCTS)),
-            shareReplay(1),
-        );
-
-    constructor(private http: HttpClient) {}
-
-    // Returns all products as an Observable for async UI updates.
-    getProducts(): Observable<StoreV2Product[]> {
-        return this.products$;
-    }
-
-    // Looks up a single product by id based on the loaded product list.
-    getProductById(productId: number): Observable<StoreV2Product | undefined> {
-        return this.products$.pipe(
-            map((products) =>
-                products.find((product) => product.id === productId),
-            ),
-        );
-    }
-
     // Adds one product instance to cart state.
     addToCart(product: StoreV2Product): void {
         const nextItems = [...this.cartItemsSubject.value, product];
@@ -76,5 +52,29 @@ export class StoreV2Service {
     // Clears all items from cart state.
     clearCart(): void {
         this.cartItemsSubject.next([]);
+    }
+
+    // shareReplay(1) caches the product list so we do not request it multiple times.
+    private readonly products$: Observable<StoreV2Product[]> = this.http
+        .get<StoreV2Product[]>("/assets/store-v2-products.json")
+        .pipe(
+            catchError(() => of(STORE_V2_PRODUCTS)), // use fallback data on error
+            shareReplay(1),
+        );
+
+    constructor(private http: HttpClient) {}
+
+    // Returns all products as an Observable for async UI updates.
+    getProducts(): Observable<StoreV2Product[]> {
+        return this.products$;
+    }
+
+    // Looks up a single product by id based on the loaded product list.
+    getProductById(productId: number): Observable<StoreV2Product | undefined> {
+        return this.products$.pipe(
+            map((products) =>
+                products.find((product) => product.id === productId),
+            ),
+        );
     }
 }

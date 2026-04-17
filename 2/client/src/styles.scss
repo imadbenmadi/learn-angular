@@ -1,0 +1,16 @@
+/*
+  styles.scss
+  ----------
+  Global styles entry.
+
+  Bootstrap SCSS is imported here so you can:
+  - use Bootstrap utility classes in templates
+  - customize Bootstrap via SCSS later (advanced topic)
+*/
+
+@import "bootstrap/scss/bootstrap";
+
+/* Keep custom styling minimal and "Bootstrap-native" */
+body {
+    min-height: 100vh;
+}

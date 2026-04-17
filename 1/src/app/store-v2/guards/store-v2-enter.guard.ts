@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import {
     ActivatedRouteSnapshot,
-    CanActivate,
     Router,
     RouterStateSnapshot,
     UrlTree,
@@ -10,7 +9,7 @@ import {
 @Injectable({
     providedIn: "root",
 })
-export class StoreV2EnterGuard implements CanActivate {
+export class StoreV2EnterGuard {
     constructor(private router: Router) {}
 
     // Guard example: blocks access when ?locked=true is present in URL.

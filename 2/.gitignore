@@ -1,0 +1,17 @@
+# Fullstack app 2
+
+# Node
+node_modules/
+
+# Builds
+client/dist/
+server/dist/
+
+# Angular CLI cache
+client/.angular/
+
+# Env secrets
+server/.env
+
+# OS
+.DS_Store

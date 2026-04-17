@@ -4,10 +4,7 @@ import {
     forwardRef,
     Input,
 } from "@angular/core";
-import {
-    ControlValueAccessor,
-    NG_VALUE_ACCESSOR,
-} from "@angular/forms";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 // A tiny custom form control demonstrating ControlValueAccessor.
 // It integrates with Reactive Forms and supports disabled state.

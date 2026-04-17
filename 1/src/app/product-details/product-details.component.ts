@@ -27,7 +27,7 @@ export class ProductDetailsComponent implements OnInit {
         window.alert("Your product has been added to the cart!");
     }
     constructor(
-        private route: ActivatedRoute,
+        private route: ActivatedRoute, // we used this route to get the product id from the current URL. 
         private cartService: CartService,
     ) {}
 }

@@ -1,7 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { StoreV3FacadeService } from "../state/store-v3-facade.service";
 import { StoreV3FilterCategory } from "../state/store-v3-facade.service";
 import { StoreV3Product } from "../models/store-v3-product.model";

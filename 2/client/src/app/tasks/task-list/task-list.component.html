@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h4 mb-0">My tasks</h1>
+        <p class="text-muted mb-0">A simple CRUD screen backed by MySQL.</p>
+    </div>
+
+    <a class="btn btn-primary" routerLink="/tasks/new">+ New task</a>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+</div>
+
+<div *ngIf="isLoading" class="alert alert-info" role="alert">Loading…</div>
+
+<div
+    *ngIf="!isLoading && tasks.length === 0"
+    class="alert alert-secondary"
+    role="alert"
+>
+    No tasks yet. Click <strong>New task</strong> to create one.
+</div>
+
+<div class="table-responsive" *ngIf="!isLoading && tasks.length > 0">
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th style="width: 140px">Status</th>
+                <th style="width: 140px">Due</th>
+                <th style="width: 180px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of tasks">
+                <td>
+                    <div class="fw-semibold">{{ task.title }}</div>
+                    <div class="text-muted small" *ngIf="task.description">
+                        {{ task.description }}
+                    </div>
+                </td>
+                <td>
+                    <span
+                        class="badge"
+                        [ngClass]="statusBadgeClass(task.status)"
+                        >{{ task.status }}</span
+                    >
+                </td>
+                <td>
+                    <span *ngIf="task.dueDate; else noDue">{{
+                        task.dueDate
+                    }}</span>
+                    <ng-template #noDue>-</ng-template>
+                </td>
+                <td>
+                    <a
+                        class="btn btn-outline-primary btn-sm me-2"
+                        [routerLink]="['/tasks', task.id, 'edit']"
+                        >Edit</a
+                    >
+                    <button
+                        class="btn btn-outline-danger btn-sm"
+                        type="button"
+                        (click)="deleteTask(task)"
+                    >
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
