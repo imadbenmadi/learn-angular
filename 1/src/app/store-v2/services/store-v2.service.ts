@@ -21,10 +21,10 @@ export class StoreV2Service {
     );
 
     // Components subscribe to this stream to get cart updates.
-    readonly cartItems$ = this.cartItemsSubject.asObservable();
+    readonly cartItems$ : Observable<StoreV2Product[]> = this.cartItemsSubject.asObservable();
 
     // This derived stream computes total price from current cart items.
-    readonly cartTotal$ = this.cartItems$.pipe(
+    readonly cartTotal$ : Observable<number> = this.cartItems$.pipe(
         map((items) => items.reduce((sum, item) => sum + item.price, 0)),
     );
 

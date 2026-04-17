@@ -29,4 +29,11 @@ export class StoreV2EnterGuard {
 
         return true;
     }
+
+    canActivateChild(
+        childRoute: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot,
+    ): boolean | UrlTree {
+        return this.canActivate(childRoute, state);
+    }
 }

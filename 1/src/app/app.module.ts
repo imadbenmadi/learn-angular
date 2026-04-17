@@ -38,6 +38,8 @@ import { STORE_V3_PRODUCTS_URL } from "./store-v3/tokens/store-v3.tokens";
                 path: "store-v2",
                 component: StoreV2ShellComponent,
                 canActivate: [StoreV2EnterGuard],
+                canActivateChild: [StoreV2EnterGuard],
+                runGuardsAndResolvers: "paramsOrQueryParamsChange",
                 children: [
                     {
                         path: "",
