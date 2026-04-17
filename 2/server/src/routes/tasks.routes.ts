@@ -159,7 +159,9 @@ tasksRouter.post(
         if (title.length < 2) {
             throw new HttpError(400, "Title must be at least 2 characters");
         }
-
+        else if (description && description.length > 1000) {
+            throw new HttpError(400, "Description must be at most 1000 characters");
+        }
         const [result] = await pool.execute<ResultSetHeader>(
             "INSERT INTO tasks (user_id, title, description, status, due_date) VALUES (?, ?, ?, ?, ?)",
             [userId, title, description, status, dueDate],

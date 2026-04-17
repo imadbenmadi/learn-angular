@@ -61,7 +61,9 @@ authRouter.post(
             "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
             [name, email, passwordHash],
         );
-
+        if (result.affectedRows !== 1) {
+            throw new HttpError(500, "Failed to create user");
+        }
         const userId = result.insertId;
         const token = signAccessToken({ userId });
 
