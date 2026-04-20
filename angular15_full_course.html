@@ -1,0 +1,1138 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:210px minmax(0,1fr);min-height:700px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.sidebar{border-right:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);padding:10px 8px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+.sidebar-section{font-size:10px;font-weight:500;color:var(--color-text-tertiary);padding:10px 8px 4px;letter-spacing:.06em;text-transform:uppercase}
+.nav-item{padding:7px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:7px;border:none;background:none;width:100%;text-align:left;transition:background .1s;line-height:1.3}
+.nav-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.nav-item.active{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500;border:0.5px solid var(--color-border-tertiary)}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.done-mark{margin-left:auto;font-size:10px;color:var(--color-text-success);flex-shrink:0}
+.main{padding:24px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+.lesson-tag{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px}
+.lesson-title{font-size:19px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.lesson-sub{font-size:13px;color:var(--color-text-secondary);line-height:1.5}
+.concept{background:var(--color-background-secondary);padding:13px 15px;font-size:13px;color:var(--color-text-secondary);line-height:1.7;border-left:2px solid var(--color-border-secondary)}
+.section-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+.tab-row{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:14px}
+.tab{padding:7px 13px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.tab.active{color:var(--color-text-primary);font-weight:500;border-bottom-color:var(--color-text-primary)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.code-block{background:var(--color-background-tertiary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:13px 15px;font-family:var(--font-mono);font-size:11.5px;color:var(--color-text-primary);line-height:1.9;white-space:pre;overflow-x:auto}
+.kw{color:var(--color-text-info)}
+.cm{color:var(--color-text-tertiary)}
+.st{color:var(--color-text-success)}
+.er{color:var(--color-text-danger)}
+.de{color:var(--color-text-warning)}
+.quiz-box{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.quiz-q{padding:13px 15px;font-size:13px;font-weight:500;color:var(--color-text-primary);background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.quiz-opt{padding:10px 15px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border:none;background:none;text-align:left;border-bottom:0.5px solid var(--color-border-tertiary);transition:background .1s;width:100%;display:block}
+.quiz-opt:last-child{border-bottom:none}
+.quiz-opt:hover:not(.locked){background:var(--color-background-secondary)}
+.quiz-opt.correct{background:var(--color-background-success);color:var(--color-text-success);font-weight:500}
+.quiz-opt.wrong{background:var(--color-background-danger);color:var(--color-text-danger)}
+.quiz-fb{padding:11px 15px;font-size:12px;line-height:1.6;border-top:0.5px solid var(--color-border-tertiary);display:none}
+.note{border:0.5px solid var(--color-border-info);border-radius:var(--border-radius-md);padding:11px 13px;font-size:12px;color:var(--color-text-info);line-height:1.6;background:var(--color-background-info)}
+.warn{border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:11px 13px;font-size:12px;color:var(--color-text-warning);line-height:1.6;background:var(--color-background-warning)}
+.nav-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 14px;border-radius:var(--border-radius-md);font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-p{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.btn-p:hover{opacity:.85}
+.prog-wrap{display:flex;align-items:center;gap:8px}
+.prog-track{flex:1;height:3px;background:var(--color-border-tertiary);border-radius:2px}
+.prog-fill{height:3px;border-radius:2px;background:var(--color-text-primary);transition:width .4s}
+.prog-txt{font-size:11px;color:var(--color-text-tertiary);white-space:nowrap}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px}
+.mini-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;background:var(--color-background-secondary)}
+.mini-card-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.mini-card-sub{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+</style>
+
+<h2 class="sr-only">Angular 15 full course — interactive lessons with code examples and quizzes</h2>
+<div class="app">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main" id="main"></div>
+</div>
+
+<script>
+const sections = [
+  {
+    title: "Foundation",
+    lessons: [
+      {
+        id:"intro", label:"Angular 15 overview", color:"#378ADD", bg:"#E6F1FB",
+        tag:"Intro", tagBg:"#E6F1FB", tagColor:"#185FA5",
+        sub:"What Angular is, how it works, and what's new in v15",
+        concept:"Angular is a full platform for building web apps — not just a UI library. It ships routing, HTTP, forms, DI, testing, and build tools out of the box. Angular 15 made standalone components stable, meaning you can build entire apps without NgModule.",
+        tabs:[
+          {label:"What Angular gives you", code:`<span class="cm">// React — you pick and wire everything yourself</span>
+React + ReactRouter + Axios + ReactHookForm + Redux + ...
+
+<span class="cm">// Angular 15 — all built in, all integrated</span>
+@angular/core      <span class="cm">// components, DI, lifecycle</span>
+@angular/router    <span class="cm">// routing, lazy loading, guards</span>
+@angular/forms     <span class="cm">// template & reactive forms</span>
+@angular/common/http <span class="cm">// HttpClient (like axios)</span>
+@angular/animations <span class="cm">// animation engine</span>
+@angular/testing   <span class="cm">// unit test utilities</span>
+Angular CLI        <span class="cm">// project scaffolding & build</span>`},
+          {label:"Angular 15 highlights", code:`<span class="cm">// 1. Standalone components — STABLE (biggest change)</span>
+<span class="cm">// Build without NgModule entirely</span>
+@Component({ standalone: <span class="kw">true</span>, imports: [...], ... })
+
+<span class="cm">// 2. Directive composition API</span>
+<span class="cm">// Compose directives without inheritance</span>
+@Component({ hostDirectives: [CdkDrag] })
+
+<span class="cm">// 3. NgOptimizedImage — stable</span>
+<span class="cm">// Automatic image lazy loading + LCP improvement</span>
+<img ngSrc=<span class="st">"hero.jpg"</span> width=<span class="st">"800"</span> height=<span class="st">"600"</span>>
+
+<span class="cm">// 4. Router standalone APIs</span>
+<span class="cm">// Bootstrap without AppModule</span>
+bootstrapApplication(AppComponent, {
+  providers: [provideRouter(routes)]
+})`},
+          {label:"Mental model", code:`<span class="cm">// Angular app = tree of components</span>
+AppComponent                    <span class="cm">// root</span>
+  ├── NavbarComponent
+  ├── RouterOutlet              <span class="cm">// active page goes here</span>
+  │     ├── DashboardComponent
+  │     └── UsersComponent
+  │           ├── UserListComponent
+  │           └── UserDetailComponent
+  └── FooterComponent
+
+<span class="cm">// Services live alongside — shared via DI</span>
+UserService     <span class="cm">// injected wherever needed</span>
+AuthService     <span class="cm">// singleton across the whole app</span>
+HttpClient      <span class="cm">// Angular's built-in HTTP layer</span>`}
+        ],
+        note:"Angular 15 is a great starting point — standalone components give you a simpler mental model, and the CLI generates everything you need.",
+        quiz:{q:"What was the biggest change in Angular 15?",opts:["A new template syntax","Standalone components became stable, enabling NgModule-free apps","Signals replaced RxJS","A new CLI was introduced"],correct:1,feedback:"Standalone components, introduced as experimental in v14, became stable in v15. This is the biggest shift in Angular architecture in years — you can now build full apps without NgModule."}
+      },
+      {
+        id:"cli", label:"Angular CLI & project setup", color:"#378ADD", bg:"#E6F1FB",
+        tag:"Intro", tagBg:"#E6F1FB", tagColor:"#185FA5",
+        sub:"Create, serve, build, and generate code with the CLI",
+        concept:"The Angular CLI is your primary tool. It creates projects, generates components/services/modules, runs dev server, builds for production, and runs tests. Learning a handful of commands covers 90% of your daily use.",
+        tabs:[
+          {label:"Essential commands", code:`<span class="cm"># Install Angular CLI globally</span>
+npm install -g @angular/cli
+
+<span class="cm"># Create new project</span>
+ng new my-admin-app
+<span class="cm"># Prompts: routing? (yes) | CSS format? (SCSS)</span>
+
+<span class="cm"># Serve with hot reload</span>
+ng serve
+ng serve --port 4201   <span class="cm"># custom port</span>
+
+<span class="cm"># Build for production</span>
+ng build --configuration production
+
+<span class="cm"># Run unit tests</span>
+ng test`},
+          {label:"Generate commands", code:`<span class="cm"># Generate a component</span>
+ng generate component users/user-list
+ng g c users/user-list          <span class="cm"># shorthand</span>
+
+<span class="cm"># Generate a service</span>
+ng g service services/user
+
+<span class="cm"># Generate a module (with routing)</span>
+ng g module users --routing
+
+<span class="cm"># Generate a guard</span>
+ng g guard guards/auth
+
+<span class="cm"># Generate a pipe</span>
+ng g pipe pipes/truncate
+
+<span class="cm"># Generate an interface</span>
+ng g interface models/user`},
+          {label:"Project structure", code:`my-admin-app/
+├── src/
+│   ├── app/
+│   │   ├── app.component.ts      <span class="cm">// root component</span>
+│   │   ├── app.module.ts         <span class="cm">// root module</span>
+│   │   ├── app-routing.module.ts <span class="cm">// routes</span>
+│   │   ├── components/           <span class="cm">// shared components</span>
+│   │   ├── services/             <span class="cm">// injectable services</span>
+│   │   ├── models/               <span class="cm">// interfaces & types</span>
+│   │   ├── guards/               <span class="cm">// route guards</span>
+│   │   └── pages/                <span class="cm">// feature pages</span>
+│   ├── assets/
+│   ├── environments/
+│   └── styles.scss
+├── angular.json                  <span class="cm">// CLI config</span>
+└── tsconfig.json`}
+        ],
+        note:"The CLI generates the TypeScript, HTML, SCSS, and spec files for every piece. You rarely create files manually in Angular.",
+        quiz:{q:"What command generates a new service called `ProductService` inside a `services/` folder?",opts:["ng create service services/product","ng g service services/product","ng generate services/product.service","ng add service product"],correct:1,feedback:"`ng g service services/product` is the correct shorthand. The CLI creates `product.service.ts` and `product.service.spec.ts` and auto-decorates the class with @Injectable({ providedIn: 'root' })."}
+      }
+    ]
+  },
+  {
+    title: "Core building blocks",
+    lessons: [
+      {
+        id:"components", label:"Components", color:"#7F77DD", bg:"#EEEDFE",
+        tag:"Core", tagBg:"#EEEDFE", tagColor:"#534AB7",
+        sub:"The fundamental unit of Angular — every piece of UI is a component",
+        concept:"A component is a TypeScript class decorated with @Component. It controls a piece of the UI. Every component has three parts: a class (logic), a template (HTML), and styles (CSS). Components talk to each other through @Input and @Output.",
+        tabs:[
+          {label:"Component anatomy", code:`<span class="de">@Component</span>({
+  selector:    <span class="st">'app-user-card'</span>,   <span class="cm">// HTML tag name</span>
+  templateUrl: <span class="st">'./user-card.component.html'</span>,
+  styleUrls:   [<span class="st">'./user-card.component.scss'</span>]
+})
+<span class="kw">export class</span> UserCardComponent {
+  title = <span class="st">'User Card'</span>;
+  count = 0;
+
+  increment() {
+    <span class="kw">this</span>.count++;
+  }
+}
+
+<span class="cm">// In template (user-card.component.html):</span>
+<span class="cm">// &lt;h2&gt;{{ title }}&lt;/h2&gt;</span>
+<span class="cm">// &lt;p&gt;Count: {{ count }}&lt;/p&gt;</span>
+<span class="cm">// &lt;button (click)="increment()"&gt;+&lt;/button&gt;</span>`},
+          {label:"@Input & @Output", code:`<span class="cm">// Child component — accepts data, emits events</span>
+<span class="de">@Component</span>({ selector: <span class="st">'app-user-card'</span>, ... })
+<span class="kw">export class</span> UserCardComponent {
+  <span class="de">@Input</span>()  user!: User;          <span class="cm">// receive from parent</span>
+  <span class="de">@Output</span>() deleted = <span class="kw">new</span> EventEmitter<<span class="st">number</span>>();
+
+  onDelete() {
+    <span class="kw">this</span>.deleted.emit(<span class="kw">this</span>.user.id);
+  }
+}
+
+<span class="cm">// Parent template:</span>
+<span class="cm">// &lt;app-user-card</span>
+<span class="cm">//   [user]="selectedUser"</span>
+<span class="cm">//   (deleted)="handleDelete($event)"&gt;</span>
+<span class="cm">// &lt;/app-user-card&gt;</span>`},
+          {label:"Lifecycle hooks", code:`<span class="kw">export class</span> UserListComponent <span class="kw">implements</span> OnInit, OnDestroy {
+  users: User[] = [];
+  <span class="kw">private</span> sub: Subscription;
+
+  <span class="cm">// Runs after component is initialized</span>
+  ngOnInit() {
+    <span class="kw">this</span>.sub = <span class="kw">this</span>.userService.getAll()
+      .subscribe(u => <span class="kw">this</span>.users = u);
+  }
+
+  <span class="cm">// Runs on every @Input change</span>
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes[<span class="st">'user'</span>].currentValue);
+  }
+
+  <span class="cm">// Runs before component is destroyed</span>
+  ngOnDestroy() {
+    <span class="kw">this</span>.sub.unsubscribe(); <span class="cm">// prevent memory leaks</span>
+  }
+}`}
+        ],
+        note:"The most important lifecycle hook is ngOnInit — this is where you load data, not the constructor. The constructor is only for injecting dependencies.",
+        quiz:{q:"Where should you call your service to load data when a component initializes?",opts:["In the constructor","In ngOnInit","In ngOnChanges","In the template"],correct:1,feedback:"ngOnInit runs after Angular sets up the component's inputs. The constructor runs too early — inputs aren't available yet, and services might not be fully ready. ngOnInit is the standard place to fetch data."}
+      },
+      {
+        id:"templates", label:"Templates & data binding", color:"#7F77DD", bg:"#EEEDFE",
+        tag:"Core", tagBg:"#EEEDFE", tagColor:"#534AB7",
+        sub:"The 4 types of data binding — how your class and HTML communicate",
+        concept:"Angular templates are HTML with extra syntax. There are 4 binding types: interpolation (class → HTML), property binding (class → DOM), event binding (DOM → class), and two-way binding (both directions). These replace all the manual DOM manipulation you'd do in vanilla JS.",
+        tabs:[
+          {label:"All 4 bindings", code:`<span class="cm">&lt;!-- 1. Interpolation — class value → HTML text --&gt;</span>
+&lt;h1&gt;{{ user.name }}&lt;/h1&gt;
+&lt;p&gt;{{ 2 + 2 }}&lt;/p&gt;
+&lt;p&gt;{{ user.name | uppercase }}&lt;/p&gt;
+
+<span class="cm">&lt;!-- 2. Property binding — class value → DOM property --&gt;</span>
+&lt;img [src]="user.avatarUrl"&gt;
+&lt;button [disabled]="isLoading"&gt;Save&lt;/button&gt;
+&lt;app-card [user]="selectedUser"&gt;&lt;/app-card&gt;
+
+<span class="cm">&lt;!-- 3. Event binding — DOM event → class method --&gt;</span>
+&lt;button (click)="save()"&gt;Save&lt;/button&gt;
+&lt;input (keyup)="onKey($event)"&gt;
+&lt;form (ngSubmit)="onSubmit()"&gt;
+
+<span class="cm">&lt;!-- 4. Two-way binding — sync in both directions --&gt;</span>
+&lt;input [(ngModel)]="searchTerm"&gt;
+<span class="cm">&lt;!-- same as: [ngModel] + (ngModelChange) --&gt;</span>`},
+          {label:"Structural directives", code:`<span class="cm">&lt;!-- *ngIf — show/hide based on condition --&gt;</span>
+&lt;div *ngIf="isLoggedIn"&gt;Welcome!&lt;/div&gt;
+&lt;div *ngIf="user; else loading"&gt;{{ user.name }}&lt;/div&gt;
+&lt;ng-template #loading&gt;Loading...&lt;/ng-template&gt;
+
+<span class="cm">&lt;!-- *ngFor — loop over array --&gt;</span>
+&lt;li *ngFor="let user of users; let i = index"&gt;
+  {{ i + 1 }}. {{ user.name }}
+&lt;/li&gt;
+
+<span class="cm">&lt;!-- *ngFor with trackBy — performance optimization --&gt;</span>
+&lt;li *ngFor="let user of users; trackBy: trackById"&gt;
+
+<span class="cm">// In class:</span>
+trackById(index: <span class="st">number</span>, user: User) { <span class="kw">return</span> user.id; }`},
+          {label:"Pipes", code:`<span class="cm">&lt;!-- Built-in pipes --&gt;</span>
+{{ name | uppercase }}           <span class="cm">&lt;!-- ALI --&gt;</span>
+{{ price | currency:'USD' }}     <span class="cm">&lt;!-- $42.00 --&gt;</span>
+{{ date | date:'dd/MM/yyyy' }}   <span class="cm">&lt;!-- 14/04/2026 --&gt;</span>
+{{ longText | slice:0:50 }}      <span class="cm">&lt;!-- first 50 chars --&gt;</span>
+{{ obj | json }}                 <span class="cm">&lt;!-- debug JSON output --&gt;</span>
+{{ obs$ | async }}               <span class="cm">&lt;!-- subscribe automatically --&gt;</span>
+
+<span class="cm">// Custom pipe:</span>
+<span class="de">@Pipe</span>({ name: <span class="st">'truncate'</span> })
+<span class="kw">export class</span> TruncatePipe <span class="kw">implements</span> PipeTransform {
+  transform(value: <span class="st">string</span>, limit = 50): <span class="st">string</span> {
+    <span class="kw">return</span> value.length > limit
+      ? value.slice(0, limit) + <span class="st">'...'</span>
+      : value;
+  }
+}`}
+        ],
+        note:"The `async` pipe is extremely important — it subscribes to an Observable and automatically unsubscribes when the component is destroyed. Use it in templates instead of manually subscribing.",
+        quiz:{q:"What is the difference between `[src]` and `src` in an Angular template?",opts:["They are identical","[src] binds to a class property dynamically; src is a static string literal","[src] is for images only","src works in Angular, [src] is standard HTML"],correct:1,feedback:"`<img src='{{ url }}'>` is interpolation — it creates a broken-image flash while loading. `<img [src]='url'>` is property binding — it sets the DOM property directly from the class. Always use property binding for dynamic values."}
+      },
+      {
+        id:"di", label:"Dependency injection", color:"#7F77DD", bg:"#EEEDFE",
+        tag:"Core", tagBg:"#EEEDFE", tagColor:"#534AB7",
+        sub:"Angular's DI system — how services get shared across the app",
+        concept:"Dependency Injection is Angular's system for sharing objects (services) across components without manually passing them around. You declare what you need in the constructor, Angular creates and delivers it. Services are singletons by default — one instance shared everywhere.",
+        tabs:[
+          {label:"Creating a service", code:`<span class="cm">// user.service.ts — generated by: ng g service services/user</span>
+<span class="de">@Injectable</span>({
+  providedIn: <span class="st">'root'</span>  <span class="cm">// singleton for the whole app</span>
+})
+<span class="kw">export class</span> UserService {
+  <span class="kw">private</span> apiUrl = <span class="st">'/api/users'</span>;
+
+  <span class="kw">constructor</span>(<span class="kw">private</span> http: HttpClient) {}
+
+  getAll(): Observable<User[]> {
+    <span class="kw">return this</span>.http.get<User[]>(<span class="kw">this</span>.apiUrl);
+  }
+
+  getById(id: <span class="st">number</span>): Observable<User> {
+    <span class="kw">return this</span>.http.get<User>(<span class="st">\`\${this.apiUrl}/\${id}\`</span>);
+  }
+
+  create(user: Partial<User>): Observable<User> {
+    <span class="kw">return this</span>.http.post<User>(<span class="kw">this</span>.apiUrl, user);
+  }
+}`},
+          {label:"Injecting into components", code:`<span class="de">@Component</span>({ ... })
+<span class="kw">export class</span> UserListComponent <span class="kw">implements</span> OnInit {
+  users: User[] = [];
+  loading = <span class="kw">false</span>;
+
+  <span class="cm">// Angular injects both services automatically</span>
+  <span class="kw">constructor</span>(
+    <span class="kw">private</span> userService: UserService,
+    <span class="kw">private</span> router: Router
+  ) {}
+
+  ngOnInit() {
+    <span class="kw">this</span>.loading = <span class="kw">true</span>;
+    <span class="kw">this</span>.userService.getAll().subscribe({
+      next:  users => { <span class="kw">this</span>.users = users; <span class="kw">this</span>.loading = <span class="kw">false</span>; },
+      error: err   => { console.error(err); <span class="kw">this</span>.loading = <span class="kw">false</span>; }
+    });
+  }
+
+  goToUser(id: <span class="st">number</span>) {
+    <span class="kw">this</span>.router.navigate([<span class="st">'/users'</span>, id]);
+  }
+}`},
+          {label:"inject() function (v14+)", code:`<span class="cm">// Angular 14+ alternative to constructor injection</span>
+<span class="cm">// Useful in standalone components and functions</span>
+
+<span class="de">@Component</span>({ standalone: <span class="kw">true</span>, ... })
+<span class="kw">export class</span> UserListComponent {
+  <span class="cm">// inject() replaces constructor parameter</span>
+  <span class="kw">private</span> userService = inject(UserService);
+  <span class="kw">private</span> router       = inject(Router);
+
+  <span class="cm">// Also usable in helper functions outside classes</span>
+  getUsers = () => <span class="kw">this</span>.userService.getAll();
+}
+
+<span class="cm">// inject() in a factory function</span>
+<span class="kw">export function</span> provideApiConfig() {
+  <span class="kw">const</span> env = inject(EnvironmentToken);
+  <span class="kw">return</span> { baseUrl: env.apiUrl };
+}`}
+        ],
+        note:"`providedIn: 'root'` creates one singleton for the whole app. If you want a fresh instance per module or component, you can provide the service at a lower level in the providers array.",
+        quiz:{q:"Two components both inject UserService. How many instances of UserService exist?",opts:["Two — one per component","One — it's a singleton registered in root","Depends on how many times getAll() is called","One per NgModule"],correct:1,feedback:"With `providedIn: 'root'`, Angular creates exactly ONE instance of UserService and shares it everywhere. Both components get the same object. This is the standard pattern for services that hold shared state or make HTTP calls."}
+      }
+    ]
+  },
+  {
+    title: "Routing & navigation",
+    lessons: [
+      {
+        id:"routing", label:"Routing basics", color:"#1D9E75", bg:"#E1F5EE",
+        tag:"Routing", tagBg:"#E1F5EE", tagColor:"#0F6E56",
+        sub:"Map URLs to components — the Angular Router",
+        concept:"The Angular Router maps URL paths to components. When a user navigates to /users, the Router loads UserListComponent into the <router-outlet>. Routes are defined as an array of objects and can be nested, lazy-loaded, and protected by guards.",
+        tabs:[
+          {label:"Route definition", code:`<span class="cm">// app-routing.module.ts</span>
+<span class="kw">const</span> routes: Routes = [
+  { path: <span class="st">''</span>,            redirectTo: <span class="st">'/dashboard'</span>, pathMatch: <span class="st">'full'</span> },
+  { path: <span class="st">'dashboard'</span>,    component: DashboardComponent },
+  { path: <span class="st">'users'</span>,        component: UserListComponent },
+  { path: <span class="st">'users/:id'</span>,    component: UserDetailComponent },
+  { path: <span class="st">'users/new'</span>,    component: UserFormComponent },
+  { path: <span class="st">'**'</span>,           component: NotFoundComponent }
+];
+
+<span class="de">@NgModule</span>({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+<span class="kw">export class</span> AppRoutingModule {}`},
+          {label:"Router in templates", code:`<span class="cm">&lt;!-- router-outlet — where matched component renders --&gt;</span>
+&lt;router-outlet&gt;&lt;/router-outlet&gt;
+
+<span class="cm">&lt;!-- routerLink — navigate without page reload --&gt;</span>
+&lt;a routerLink="/dashboard"&gt;Dashboard&lt;/a&gt;
+&lt;a [routerLink]="['/users', user.id]"&gt;View user&lt;/a&gt;
+
+<span class="cm">&lt;!-- routerLinkActive — adds CSS class when route is active --&gt;</span>
+&lt;a routerLink="/users"
+   routerLinkActive="active-link"&gt;Users&lt;/a&gt;
+
+<span class="cm">&lt;!-- queryParams --&gt;</span>
+&lt;a [routerLink]="['/users']"
+   [queryParams]="{ page: 2, sort: 'name' }"&gt;
+  Page 2
+&lt;/a&gt;`},
+          {label:"Reading route params", code:`<span class="de">@Component</span>({ ... })
+<span class="kw">export class</span> UserDetailComponent <span class="kw">implements</span> OnInit {
+  user: User | <span class="kw">null</span> = <span class="kw">null</span>;
+
+  <span class="kw">constructor</span>(
+    <span class="kw">private</span> route:       ActivatedRoute, <span class="cm">// current route info</span>
+    <span class="kw">private</span> router:      Router,
+    <span class="kw">private</span> userService: UserService
+  ) {}
+
+  ngOnInit() {
+    <span class="cm">// Read :id from URL /users/42</span>
+    <span class="kw">const</span> id = +<span class="kw">this</span>.route.snapshot.params[<span class="st">'id'</span>];
+    <span class="kw">this</span>.userService.getById(id)
+      .subscribe(u => <span class="kw">this</span>.user = u);
+  }
+
+  goBack() {
+    <span class="kw">this</span>.router.navigate([<span class="st">'/users'</span>]);
+  }
+}`}
+        ],
+        note:"Always use `routerLink` instead of `href` for internal navigation. `href` causes a full page reload which destroys Angular's state. `routerLink` navigates within the SPA without reloading.",
+        quiz:{q:"What does `<router-outlet>` do in an Angular template?",opts:["It creates a new router instance","It marks the spot where the currently matched route's component renders","It defines the route configuration","It creates a navigation menu automatically"],correct:1,feedback:"<router-outlet> is the placeholder where Angular renders the component matched by the current URL. When you navigate to /users, the Router finds the UserListComponent and renders it inside the <router-outlet>."}
+      },
+      {
+        id:"lazyguards", label:"Lazy loading & guards", color:"#1D9E75", bg:"#E1F5EE",
+        tag:"Routing", tagBg:"#E1F5EE", tagColor:"#0F6E56",
+        sub:"Load modules on demand and protect routes — exactly what your admin needs",
+        concept:"Lazy loading splits your app into chunks that only download when needed. Guards are interceptors that run before a route loads — perfect for auth checks. This is the solution to the problem you had in React: role-based access with zero client-side bundle exposure.",
+        tabs:[
+          {label:"Lazy loading", code:`<span class="cm">// app-routing.module.ts</span>
+<span class="kw">const</span> routes: Routes = [
+  <span class="cm">// Eager — loads immediately at startup</span>
+  { path: <span class="st">'dashboard'</span>, component: DashboardComponent },
+
+  <span class="cm">// Lazy — bundle only downloads when user visits /users</span>
+  {
+    path: <span class="st">'users'</span>,
+    loadChildren: () =>
+      <span class="kw">import</span>(<span class="st">'./users/users.module'</span>)
+        .then(m => m.UsersModule)
+  },
+  {
+    path: <span class="st">'reports'</span>,
+    loadChildren: () =>
+      <span class="kw">import</span>(<span class="st">'./reports/reports.module'</span>)
+        .then(m => m.ReportsModule)
+  }
+];
+<span class="cm">// Each lazy module = separate JS file in production</span>`},
+          {label:"Auth guard", code:`<span class="cm">// ng g guard guards/auth</span>
+<span class="de">@Injectable</span>({ providedIn: <span class="st">'root'</span> })
+<span class="kw">export class</span> AuthGuard <span class="kw">implements</span> CanActivate {
+  <span class="kw">constructor</span>(
+    <span class="kw">private</span> auth:   AuthService,
+    <span class="kw">private</span> router: Router
+  ) {}
+
+  canActivate(): <span class="st">boolean</span> {
+    <span class="kw">if</span> (<span class="kw">this</span>.auth.isLoggedIn()) {
+      <span class="kw">return true</span>;  <span class="cm">// ✅ load the route</span>
+    }
+    <span class="kw">this</span>.router.navigate([<span class="st">'/login'</span>]);
+    <span class="kw">return false</span>;   <span class="cm">// ❌ redirect to login</span>
+  }
+}`},
+          {label:"Role guard", code:`<span class="cm">// Role-based guard — perfect for your admin dashboard</span>
+<span class="de">@Injectable</span>({ providedIn: <span class="st">'root'</span> })
+<span class="kw">export class</span> RoleGuard <span class="kw">implements</span> CanActivate {
+  <span class="kw">constructor</span>(<span class="kw">private</span> auth: AuthService, <span class="kw">private</span> router: Router) {}
+
+  canActivate(route: ActivatedRouteSnapshot): <span class="st">boolean</span> {
+    <span class="kw">const</span> required = route.data[<span class="st">'role'</span>] <span class="kw">as string</span>;
+    <span class="kw">if</span> (<span class="kw">this</span>.auth.hasRole(required)) <span class="kw">return true</span>;
+    <span class="kw">this</span>.router.navigate([<span class="st">'/unauthorized'</span>]);
+    <span class="kw">return false</span>;
+  }
+}
+
+<span class="cm">// Route config — attach roles declaratively</span>
+{ path: <span class="st">'reports'</span>,  loadChildren: ..., canActivate: [AuthGuard, RoleGuard], data: { role: <span class="st">'reports-viewer'</span> } },
+{ path: <span class="st">'users'</span>,    loadChildren: ..., canActivate: [AuthGuard, RoleGuard], data: { role: <span class="st">'user-admin'</span> } }`}
+        ],
+        note:"With lazy loading + guards, an admin without 'reports-viewer' role never downloads the reports bundle at all — not just hidden, genuinely never sent to their browser.",
+        quiz:{q:"A reports-viewer admin navigates to /users which requires the 'user-admin' role. What happens?",opts:["The users page loads but shows a permission error","The UsersModule bundle downloads but renders blank","The RoleGuard returns false — redirect happens, bundle never downloads","Angular throws a runtime exception"],correct:2,feedback:"The RoleGuard's canActivate() runs BEFORE the lazy module loads. It returns false and redirects. The UsersModule JavaScript bundle is never requested. This is genuine access control, not just UI hiding."}
+      }
+    ]
+  },
+  {
+    title: "Forms",
+    lessons: [
+      {
+        id:"reactiveforms", label:"Reactive forms", color:"#D85A30", bg:"#FAECE7",
+        tag:"Forms", tagBg:"#FAECE7", tagColor:"#993C1D",
+        sub:"The professional approach to forms — type-safe since Angular 14",
+        concept:"Reactive forms are defined in the component class, not the template. They're fully type-safe in Angular 14+, easily testable, and composable. You define the form structure in TypeScript and bind it to the HTML. This is the recommended approach for complex forms.",
+        tabs:[
+          {label:"FormBuilder setup", code:`<span class="de">@Component</span>({ ... })
+<span class="kw">export class</span> UserFormComponent {
+  <span class="cm">// FormBuilder creates the form — inject it</span>
+  <span class="kw">constructor</span>(<span class="kw">private</span> fb: FormBuilder) {}
+
+  <span class="cm">// Typed form (Angular 14+)</span>
+  form = <span class="kw">this</span>.fb.group({
+    name:     [<span class="st">''</span>,    [Validators.required, Validators.minLength(3)]],
+    email:    [<span class="st">''</span>,    [Validators.required, Validators.email]],
+    role:     [<span class="st">'viewer'</span>, Validators.required],
+    password: [<span class="st">''</span>,    [Validators.required, Validators.minLength(8)]],
+    active:   [<span class="kw">true</span>]
+  });
+
+  <span class="cm">// TypeScript knows form.value.name is string | null</span>
+  get nameControl() { <span class="kw">return this</span>.form.get(<span class="st">'name'</span>)!; }
+}`},
+          {label:"Template binding", code:`<span class="cm">&lt;!-- Bind form to HTML --&gt;</span>
+&lt;form [formGroup]="form" (ngSubmit)="onSubmit()"&gt;
+
+  &lt;input formControlName="name"&gt;
+  &lt;span *ngIf="nameControl.invalid && nameControl.touched"&gt;
+    Name is required (min 3 chars)
+  &lt;/span&gt;
+
+  &lt;input formControlName="email" type="email"&gt;
+
+  &lt;select formControlName="role"&gt;
+    &lt;option value="admin"&gt;Admin&lt;/option&gt;
+    &lt;option value="viewer"&gt;Viewer&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;button type="submit" [disabled]="form.invalid"&gt;
+    Save
+  &lt;/button&gt;
+
+&lt;/form&gt;`},
+          {label:"Submit & patch", code:`onSubmit() {
+  <span class="kw">if</span> (<span class="kw">this</span>.form.invalid) <span class="kw">return</span>;
+
+  <span class="kw">const</span> payload = <span class="kw">this</span>.form.value;
+  <span class="kw">this</span>.userService.create(payload).subscribe({
+    next:  () => <span class="kw">this</span>.router.navigate([<span class="st">'/users'</span>]),
+    error: err => <span class="kw">this</span>.error = err.message
+  });
+}
+
+<span class="cm">// Patching form values (e.g. edit mode — load existing user)</span>
+ngOnInit() {
+  <span class="kw">this</span>.userService.getById(<span class="kw">this</span>.userId).subscribe(user => {
+    <span class="kw">this</span>.form.patchValue({  <span class="cm">// partial update — ok to skip fields</span>
+      name:  user.name,
+      email: user.email,
+      role:  user.role
+    });
+  });
+}`}
+        ],
+        note:"Never use `form.value` directly in TypeScript — Angular 14 typed forms give you `.getRawValue()` for full type safety including disabled controls.",
+        quiz:{q:"What is the difference between `patchValue()` and `setValue()` on a form?",opts:["They are identical","patchValue updates only the fields you provide; setValue requires ALL fields","setValue is async, patchValue is synchronous","patchValue only works on FormControl, not FormGroup"],correct:1,feedback:"patchValue is forgiving — provide only the fields you want to update. setValue is strict — you must provide every field in the form or it throws an error. Use patchValue for edit forms where you load existing data."}
+      }
+    ]
+  },
+  {
+    title: "HTTP & RxJS",
+    lessons: [
+      {
+        id:"http", label:"HttpClient & services", color:"#BA7517", bg:"#FAEEDA",
+        tag:"HTTP", tagBg:"#FAEEDA", tagColor:"#854F0B",
+        sub:"Making API calls — Angular's built-in HTTP layer",
+        concept:"Angular's HttpClient is a wrapper around fetch that returns Observables instead of Promises. It's typed, interceptable, and testable out of the box. You always use it inside a service, never directly in a component.",
+        tabs:[
+          {label:"Full CRUD service", code:`<span class="de">@Injectable</span>({ providedIn: <span class="st">'root'</span> })
+<span class="kw">export class</span> UserService {
+  <span class="kw">private</span> url = <span class="st">'/api/users'</span>;
+  <span class="kw">constructor</span>(<span class="kw">private</span> http: HttpClient) {}
+
+  getAll():                 Observable<User[]>  { <span class="kw">return this</span>.http.get<User[]>(<span class="kw">this</span>.url); }
+  getById(id: <span class="st">number</span>):    Observable<User>    { <span class="kw">return this</span>.http.get<User>(<span class="st">\`\${this.url}/\${id}\`</span>); }
+  create(u: Partial<User>): Observable<User>    { <span class="kw">return this</span>.http.post<User>(<span class="kw">this</span>.url, u); }
+  update(id: <span class="st">number</span>, u: Partial<User>): Observable<User> {
+    <span class="kw">return this</span>.http.put<User>(<span class="st">\`\${this.url}/\${id}\`</span>, u);
+  }
+  delete(id: <span class="st">number</span>):    Observable<<span class="st">void</span>>    { <span class="kw">return this</span>.http.delete<<span class="st">void</span>>(<span class="st">\`\${this.url}/\${id}\`</span>); }
+}`},
+          {label:"HTTP interceptors", code:`<span class="cm">// Intercept every request — add auth token, handle errors</span>
+<span class="de">@Injectable</span>()
+<span class="kw">export class</span> AuthInterceptor <span class="kw">implements</span> HttpInterceptor {
+  <span class="kw">constructor</span>(<span class="kw">private</span> auth: AuthService) {}
+
+  intercept(req: HttpRequest<<span class="st">any</span>>, next: HttpHandler): Observable<HttpEvent<<span class="st">any</span>>> {
+    <span class="kw">const</span> token = <span class="kw">this</span>.auth.getToken();
+
+    <span class="kw">const</span> authReq = req.clone({
+      setHeaders: { Authorization: <span class="st">\`Bearer \${token}\`</span> }
+    });
+
+    <span class="kw">return</span> next.handle(authReq).pipe(
+      catchError(err => {
+        <span class="kw">if</span> (err.status === 401) <span class="kw">this</span>.auth.logout();
+        <span class="kw">return</span> throwError(() => err);
+      })
+    );
+  }
+}`},
+          {label:"Error handling", code:`<span class="kw">export class</span> UserService {
+  getAll(): Observable<User[]> {
+    <span class="kw">return this</span>.http.get<User[]>(<span class="kw">this</span>.url).pipe(
+      catchError(<span class="kw">this</span>.handleError)
+    );
+  }
+
+  <span class="kw">private</span> handleError(err: HttpErrorResponse): Observable<<span class="kw">never</span>> {
+    <span class="kw">let</span> msg = <span class="st">'An error occurred'</span>;
+    <span class="kw">if</span> (err.status === 404) msg = <span class="st">'Not found'</span>;
+    <span class="kw">if</span> (err.status === 401) msg = <span class="st">'Unauthorized'</span>;
+    <span class="kw">if</span> (err.status === 0)   msg = <span class="st">'Network error'</span>;
+    console.error(err);
+    <span class="kw">return</span> throwError(() => <span class="kw">new</span> Error(msg));
+  }
+}`}
+        ],
+        note:"Register the interceptor in AppModule's providers array: `{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }`. The `multi: true` allows multiple interceptors.",
+        quiz:{q:"Why should HttpClient calls live in a service, not directly in a component?",opts:["Performance — services are faster","Angular requires it","Separation of concerns — components handle UI, services handle data. Services are reusable across components and easier to test","HttpClient only works when injected into @Injectable classes"],correct:2,feedback:"Putting HTTP calls in services keeps components thin and focused on UI. Multiple components can share the same service. Services are much easier to unit test by mocking HttpClient. This is a core Angular architectural principle."}
+      },
+      {
+        id:"rxjs", label:"RxJS essentials", color:"#BA7517", bg:"#FAEEDA",
+        tag:"HTTP", tagBg:"#FAEEDA", tagColor:"#854F0B",
+        sub:"The operators you'll actually use — no RxJS overwhelm",
+        concept:"RxJS is a library for async data streams. Angular's HttpClient returns Observables. You don't need to learn all of RxJS — just 8-10 operators cover 90% of real Angular work. Think of operators as array methods (map, filter) but for async data.",
+        tabs:[
+          {label:"The must-know operators", code:`<span class="kw">import</span> { map, filter, tap, switchMap, catchError,
+         debounceTime, distinctUntilChanged, takeUntil } <span class="kw">from</span> <span class="st">'rxjs/operators'</span>;
+
+<span class="cm">// map — transform each value (like Array.map)</span>
+users$.pipe(map(users => users.filter(u => u.active)))
+
+<span class="cm">// tap — side effect without changing the stream</span>
+http.get(url).pipe(tap(data => console.log(data)))
+
+<span class="cm">// switchMap — cancel previous, switch to new observable</span>
+<span class="cm">// Perfect for search: cancel old request when user types</span>
+searchTerm$.pipe(switchMap(term => this.api.search(term)))
+
+<span class="cm">// catchError — handle errors without breaking the stream</span>
+http.get(url).pipe(catchError(err => of([])))`},
+          {label:"Search with debounce", code:`<span class="cm">// Real-world pattern: live search</span>
+<span class="de">@Component</span>({ ... })
+<span class="kw">export class</span> SearchComponent <span class="kw">implements</span> OnInit {
+  searchControl = <span class="kw">new</span> FormControl(<span class="st">''</span>);
+  results$!: Observable<User[]>;
+
+  ngOnInit() {
+    <span class="kw">this</span>.results$ = <span class="kw">this</span>.searchControl.valueChanges.pipe(
+      debounceTime(300),          <span class="cm">// wait 300ms after typing stops</span>
+      distinctUntilChanged(),     <span class="cm">// ignore if same value</span>
+      switchMap(term =>           <span class="cm">// cancel old, run new request</span>
+        <span class="kw">this</span>.userService.search(term ?? <span class="st">''</span>)
+      ),
+      catchError(() => of([]))    <span class="cm">// on error, return empty array</span>
+    );
+  }
+}
+<span class="cm">// Template: &lt;li *ngFor="let u of results$ | async"&gt;</span>`},
+          {label:"Unsubscribing patterns", code:`<span class="cm">// Pattern 1: takeUntil + Subject (most common)</span>
+<span class="kw">export class</span> MyComponent <span class="kw">implements</span> OnDestroy {
+  <span class="kw">private</span> destroy$ = <span class="kw">new</span> Subject<<span class="st">void</span>>();
+
+  ngOnInit() {
+    this.service.getUsers()
+      .pipe(takeUntil(<span class="kw">this</span>.destroy$))  <span class="cm">// auto-unsub on destroy</span>
+      .subscribe(users => <span class="kw">this</span>.users = users);
+  }
+
+  ngOnDestroy() {
+    <span class="kw">this</span>.destroy$.next();
+    <span class="kw">this</span>.destroy$.complete();
+  }
+}
+
+<span class="cm">// Pattern 2: async pipe (best — no manual unsubscribe)</span>
+<span class="cm">// users$ = this.service.getAll();</span>
+<span class="cm">// Template: {{ users$ | async }}</span>`}
+        ],
+        note:"The `async` pipe in templates is the cleanest approach — it subscribes, unsubscribes, and triggers change detection automatically. Prefer it over manual subscription whenever possible.",
+        quiz:{q:"Why use `switchMap` instead of `mergeMap` for a search feature?",opts:["switchMap is faster","switchMap cancels the previous request when a new search term arrives — prevents stale results","mergeMap doesn't work with HttpClient","They are identical for this use case"],correct:1,feedback:"With mergeMap, if a user types quickly, multiple requests fly out and arrive in random order — old results can overwrite new ones. switchMap cancels the previous in-flight request when a new value arrives. For search, this is almost always what you want."}
+      }
+    ]
+  },
+  {
+    title: "Modules & standalone",
+    lessons: [
+      {
+        id:"ngmodule", label:"NgModule system", color:"#993556", bg:"#FBEAF0",
+        tag:"Modules", tagBg:"#FBEAF0", tagColor:"#72243E",
+        sub:"How Angular organizes features into modules",
+        concept:"NgModule is Angular's way to group related components, directives, and pipes together. Every component must be declared in exactly one NgModule. Modules can import other modules and export things for other modules to use.",
+        tabs:[
+          {label:"NgModule anatomy", code:`<span class="de">@NgModule</span>({
+  declarations: [
+    <span class="cm">// Components, directives, pipes that belong to THIS module</span>
+    UserListComponent,
+    UserDetailComponent,
+    UserFormComponent,
+    UserAvatarComponent,
+  ],
+  imports: [
+    <span class="cm">// Modules whose exports you need</span>
+    CommonModule,      <span class="cm">// *ngIf, *ngFor, async pipe etc.</span>
+    ReactiveFormsModule,
+    UsersRoutingModule,
+    SharedModule,      <span class="cm">// your own shared components</span>
+  ],
+  exports: [
+    <span class="cm">// What other modules can use from this module</span>
+    UserAvatarComponent
+  ]
+})
+<span class="kw">export class</span> UsersModule {}`},
+          {label:"Feature module structure", code:`<span class="cm">// users/ folder structure</span>
+users/
+├── users.module.ts          <span class="cm">// NgModule declaration</span>
+├── users-routing.module.ts  <span class="cm">// child routes</span>
+├── components/
+│   ├── user-list/
+│   ├── user-detail/
+│   └── user-form/
+└── services/
+    └── user.service.ts
+
+<span class="cm">// users-routing.module.ts</span>
+<span class="kw">const</span> routes: Routes = [
+  { path: <span class="st">''</span>,      component: UserListComponent },
+  { path: <span class="st">':id'</span>,   component: UserDetailComponent },
+  { path: <span class="st">'new'</span>,   component: UserFormComponent },
+];
+<span class="de">@NgModule</span>({ imports: [RouterModule.forChild(routes)], exports: [RouterModule] })
+<span class="kw">export class</span> UsersRoutingModule {}`},
+          {label:"SharedModule pattern", code:`<span class="cm">// shared/shared.module.ts — common things used everywhere</span>
+<span class="de">@NgModule</span>({
+  declarations: [
+    TruncatePipe,
+    AvatarComponent,
+    ConfirmDialogComponent,
+    LoadingSpinnerComponent,
+  ],
+  imports: [CommonModule],
+  exports: [
+    <span class="cm">// Export everything declared + common Angular modules</span>
+    CommonModule,
+    TruncatePipe,
+    AvatarComponent,
+    ConfirmDialogComponent,
+    LoadingSpinnerComponent,
+  ]
+})
+<span class="kw">export class</span> SharedModule {}
+
+<span class="cm">// Now any feature module just imports SharedModule</span>
+<span class="cm">// and gets everything without re-importing CommonModule</span>`}
+        ],
+        note:"The most common beginner mistake: declaring a component in two NgModules. Angular will throw an error. Each component belongs to exactly one module.",
+        quiz:{q:"You want to use *ngIf and *ngFor in a feature module's template. What do you need to import?",opts:["FormsModule","RouterModule","CommonModule","BrowserModule"],correct:2,feedback:"CommonModule exports *ngIf, *ngFor, *ngSwitch, the async pipe, and other common directives. BrowserModule also re-exports CommonModule, but BrowserModule should only be imported once in AppModule. Use CommonModule in all feature modules."}
+      },
+      {
+        id:"standalone", label:"Standalone components (v15)", color:"#993556", bg:"#FBEAF0",
+        tag:"Modules", tagBg:"#FBEAF0", tagColor:"#72243E",
+        sub:"The Angular 15 way — no NgModule needed",
+        concept:"Standalone components are the future of Angular. Instead of declaring a component in an NgModule and importing modules there, each component declares its own dependencies directly. Simpler, more explicit, and easier to understand at a glance.",
+        tabs:[
+          {label:"Standalone component", code:`<span class="cm">// Traditional (requires NgModule):</span>
+<span class="de">@Component</span>({ selector: <span class="st">'app-user-card'</span>, ... })
+<span class="kw">export class</span> UserCardComponent {} <span class="cm">// declared in UsersModule</span>
+
+<span class="cm">// Standalone (Angular 15 — self-contained):</span>
+<span class="de">@Component</span>({
+  selector:   <span class="st">'app-user-card'</span>,
+  standalone: <span class="kw">true</span>,           <span class="cm">// ← the magic flag</span>
+  imports: [
+    CommonModule,              <span class="cm">// direct imports here</span>
+    RouterModule,
+    TruncatePipe,
+  ],
+  templateUrl: <span class="st">'./user-card.component.html'</span>,
+})
+<span class="kw">export class</span> UserCardComponent {
+  <span class="de">@Input</span>() user!: User;
+}`},
+          {label:"Standalone app bootstrap", code:`<span class="cm">// main.ts — no AppModule needed</span>
+<span class="kw">import</span> { bootstrapApplication } <span class="kw">from</span> <span class="st">'@angular/platform-browser'</span>;
+<span class="kw">import</span> { provideRouter }        <span class="kw">from</span> <span class="st">'@angular/router'</span>;
+<span class="kw">import</span> { provideHttpClient }    <span class="kw">from</span> <span class="st">'@angular/common/http'</span>;
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(),
+    provideAnimations(),
+  ]
+});
+
+<span class="cm">// AppComponent must also be standalone: true</span>
+<span class="de">@Component</span>({
+  selector:   <span class="st">'app-root'</span>,
+  standalone: <span class="kw">true</span>,
+  imports:    [RouterOutlet, NavbarComponent],
+  template:   <span class="st">\`&lt;app-navbar/&gt;&lt;router-outlet/&gt;\`</span>
+})
+<span class="kw">export class</span> AppComponent {}`},
+          {label:"Lazy loading standalone", code:`<span class="cm">// Lazy load a standalone component directly (no module!)</span>
+<span class="kw">const</span> routes: Routes = [
+  {
+    path: <span class="st">'users'</span>,
+    loadComponent: () =>
+      <span class="kw">import</span>(<span class="st">'./users/user-list.component'</span>)
+        .then(m => m.UserListComponent)
+  },
+  {
+    path: <span class="st">'reports'</span>,
+    loadChildren: () =>
+      <span class="kw">import</span>(<span class="st">'./reports/routes'</span>)  <span class="cm">// routes array, not a module</span>
+        .then(m => m.REPORTS_ROUTES)
+  }
+];
+
+<span class="cm">// reports/routes.ts</span>
+<span class="kw">export const</span> REPORTS_ROUTES: Routes = [
+  { path: <span class="st">''</span>,        component: ReportListComponent },
+  { path: <span class="st">':id'</span>,     component: ReportDetailComponent },
+]`}
+        ],
+        note:"For Angular 15 new projects, standalone is the recommended approach. For existing codebases using NgModule, both can coexist — you can mix them during migration.",
+        quiz:{q:"In a standalone component, where do you import CommonModule to use *ngIf?",opts:["In the NgModule that declares this component","Directly in the component's @Component({ imports: [...] })","In AppModule's imports array","CommonModule is available automatically in standalone components"],correct:1,feedback:"Standalone components are self-contained — they declare their own imports directly in the @Component decorator. This makes each component explicit about its dependencies. No NgModule needed."}
+      }
+    ]
+  },
+  {
+    title: "Production patterns",
+    lessons: [
+      {
+        id:"changedetection", label:"Change detection", color:"#5F5E5A", bg:"#F1EFE8",
+        tag:"Advanced", tagBg:"#F1EFE8", tagColor:"#444441",
+        sub:"How Angular knows when to update the DOM — and how to make it faster",
+        concept:"Angular uses change detection to sync your component class state with the DOM. By default it checks everything on every event. OnPush mode only checks when an @Input reference changes or an Observable emits — much more performant for large apps.",
+        tabs:[
+          {label:"OnPush strategy", code:`<span class="cm">// Default — checks this component on every event (any component)</span>
+<span class="de">@Component</span>({ changeDetection: ChangeDetectionStrategy.Default })
+
+<span class="cm">// OnPush — only re-renders when:</span>
+<span class="cm">// 1. An @Input() reference changes</span>
+<span class="cm">// 2. An Observable via async pipe emits</span>
+<span class="cm">// 3. An event inside THIS component fires</span>
+<span class="cm">// 4. You manually call markForCheck()</span>
+<span class="de">@Component</span>({
+  selector: <span class="st">'app-user-card'</span>,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: <span class="st">\`&lt;div&gt;{{ user.name }}&lt;/div&gt;\`</span>
+})
+<span class="kw">export class</span> UserCardComponent {
+  <span class="de">@Input</span>() user!: User;
+  <span class="cm">// Efficient: only updates when 'user' reference changes</span>
+}`},
+          {label:"markForCheck & async", code:`<span class="de">@Component</span>({
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+<span class="kw">export class</span> NotifComponent {
+  count = 0;
+  <span class="kw">constructor</span>(<span class="kw">private</span> cd: ChangeDetectorRef, <span class="kw">private</span> ws: WebSocketService) {}
+
+  ngOnInit() {
+    <span class="kw">this</span>.ws.messages$.subscribe(msg => {
+      <span class="kw">this</span>.count++;
+      <span class="kw">this</span>.cd.markForCheck(); <span class="cm">// manually trigger check</span>
+    });
+  }
+}
+
+<span class="cm">// Better — use async pipe instead</span>
+<span class="de">@Component</span>({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: <span class="st">\`Count: {{ count$ | async }}\`</span>
+})
+<span class="kw">export class</span> NotifComponent {
+  count$ = <span class="kw">this</span>.ws.messages$.pipe(
+    scan((acc) => acc + 1, 0)
+  );
+}`},
+          {label:"Immutability matters", code:`<span class="cm">// OnPush watches REFERENCE changes, not deep equality</span>
+
+<span class="cm">// ❌ WRONG — mutating the array, reference stays same</span>
+<span class="cm">// OnPush child won't re-render!</span>
+addUser(user: User) {
+  <span class="kw">this</span>.users.push(user);
+}
+
+<span class="cm">// ✅ CORRECT — new array reference → OnPush triggers</span>
+addUser(user: User) {
+  <span class="kw">this</span>.users = [...<span class="kw">this</span>.users, user];
+}
+
+<span class="cm">// ✅ CORRECT — updating an object</span>
+updateUser(updated: User) {
+  <span class="kw">this</span>.users = <span class="kw">this</span>.users.map(u =>
+    u.id === updated.id ? { ...u, ...updated } : u
+  );
+}`}
+        ],
+        note:"Use OnPush on all presentational (dumb) components that only receive @Input data. It has a huge performance impact in large apps with many components.",
+        quiz:{q:"You use OnPush on a component that receives a `users` array as @Input. You push a new user to the array. The component doesn't update. Why?",opts:["OnPush is broken for arrays","Angular has a bug here","The array reference didn't change — push mutates in place. OnPush only triggers on reference changes","You need to call ngOnChanges manually"],correct:2,feedback:"OnPush checks if the @Input reference changed — not if the contents changed. Array.push() mutates the same array, same reference. Solution: create a new array with spread: `this.users = [...this.users, newUser]`. Now the reference changes and OnPush triggers."}
+      },
+      {
+        id:"statemanagement", label:"State management", color:"#5F5E5A", bg:"#F1EFE8",
+        tag:"Advanced", tagBg:"#F1EFE8", tagColor:"#444441",
+        sub:"Sharing state across components without prop drilling",
+        concept:"For your admin dashboard, state management is critical. Angular's BehaviorSubject pattern is a lightweight solution that works without NgRx. For larger apps, NgRx (Redux for Angular) is the enterprise standard. Start with BehaviorSubject — add NgRx when the app demands it.",
+        tabs:[
+          {label:"BehaviorSubject store", code:`<span class="cm">// Simple state management with RxJS BehaviorSubject</span>
+<span class="de">@Injectable</span>({ providedIn: <span class="st">'root'</span> })
+<span class="kw">export class</span> UserStore {
+  <span class="kw">private</span> usersSubject = <span class="kw">new</span> BehaviorSubject<User[]>([]);
+  <span class="kw">private</span> loadingSubject = <span class="kw">new</span> BehaviorSubject<<span class="st">boolean</span>>(<span class="kw">false</span>);
+
+  <span class="cm">// Public read-only streams</span>
+  users$   = <span class="kw">this</span>.usersSubject.asObservable();
+  loading$ = <span class="kw">this</span>.loadingSubject.asObservable();
+
+  <span class="kw">constructor</span>(<span class="kw">private</span> http: HttpClient) {}
+
+  loadUsers() {
+    <span class="kw">this</span>.loadingSubject.next(<span class="kw">true</span>);
+    <span class="kw">this</span>.http.get<User[]>(<span class="st">'/api/users'</span>).subscribe({
+      next:     users => <span class="kw">this</span>.usersSubject.next(users),
+      complete: ()    => <span class="kw">this</span>.loadingSubject.next(<span class="kw">false</span>)
+    });
+  }
+
+  addUser(user: User) {
+    <span class="kw">const</span> current = <span class="kw">this</span>.usersSubject.value;
+    <span class="kw">this</span>.usersSubject.next([...current, user]);
+  }
+}`},
+          {label:"Using the store", code:`<span class="cm">// Any component can subscribe — they all stay in sync</span>
+<span class="de">@Component</span>({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: <span class="st">\`
+    &lt;div *ngIf="store.loading$ | async"&gt;Loading...&lt;/div&gt;
+    &lt;app-user-card
+      *ngFor="let u of store.users$ | async"
+      [user]="u"&gt;
+    &lt;/app-user-card&gt;
+  \`</span>
+})
+<span class="kw">export class</span> UserListComponent <span class="kw">implements</span> OnInit {
+  <span class="kw">constructor</span>(<span class="kw">public</span> store: UserStore) {}
+
+  ngOnInit() { <span class="kw">this</span>.store.loadUsers(); }
+}
+
+<span class="cm">// NavbarComponent also shows user count — reads same store</span>
+<span class="de">@Component</span>({ template: <span class="st">\`Users: {{ count$ | async }}\`</span> })
+<span class="kw">export class</span> NavbarComponent {
+  count$ = <span class="kw">this</span>.store.users$.pipe(map(u => u.length));
+  <span class="kw">constructor</span>(<span class="kw">public</span> store: UserStore) {}
+}`},
+          {label:"When to add NgRx", code:`<span class="cm">// BehaviorSubject is enough when:</span>
+<span class="cm">// - State is scoped to one feature</span>
+<span class="cm">// - Team is small (1-3 devs)</span>
+<span class="cm">// - No complex state interactions</span>
+
+<span class="cm">// Consider NgRx when:</span>
+<span class="cm">// - Multiple features share and mutate the same state</span>
+<span class="cm">// - You need time-travel debugging</span>
+<span class="cm">// - Team is large — strict action/reducer separation helps</span>
+<span class="cm">// - State transitions are complex</span>
+
+<span class="cm">// NgRx flow:</span>
+<span class="cm">// Component → dispatch(Action)</span>
+<span class="cm">//           → Reducer(state, action) → new state</span>
+<span class="cm">//           → Effect (side effects, HTTP)</span>
+<span class="cm">//           → Store emits → Component updates</span>
+<span class="cm">// npm install @ngrx/store @ngrx/effects @ngrx/entity</span>`}
+        ],
+        note:"For your admin dashboard with multiple admin roles and sections, BehaviorSubject stores per feature module is a great starting point. Move to NgRx if state interactions between features become complex.",
+        quiz:{q:"Two components (UserList and Navbar) both need to show the user count. What's the cleanest approach?",opts:["Pass the count as @Input through every component in the tree","Put the users array in each component separately with separate HTTP calls","Use a shared UserStore service with a BehaviorSubject — both components subscribe to the same users$ observable","Use localStorage to share state between components"],correct:2,feedback:"A shared store service (singleton via providedIn: 'root') with BehaviorSubject is the right tool. Both components subscribe to the same stream — when users load or change, both update automatically without any prop drilling."}
+      }
+    ]
+  }
+];
+
+const done = new Set();
+let curSection = 0;
+let curLesson = 0;
+
+const allLessons = sections.flatMap((s,si) => s.lessons.map((l,li) => ({...l, si, li})));
+
+function getLessonIndex(si, li) {
+  let idx = 0;
+  for (let i = 0; i < si; i++) idx += sections[i].lessons.length;
+  return idx + li;
+}
+
+function buildSidebar() {
+  const sb = document.getElementById('sidebar');
+  sb.innerHTML = '';
+  sections.forEach((sec, si) => {
+    const st = document.createElement('div');
+    st.className = 'sidebar-section';
+    st.textContent = sec.title;
+    sb.appendChild(st);
+    sec.lessons.forEach((l, li) => {
+      const idx = getLessonIndex(si, li);
+      const btn = document.createElement('button');
+      btn.className = 'nav-item' + (si===curSection && li===curLesson ? ' active' : '');
+      btn.innerHTML = `<span class="nav-dot" style="background:${l.color}"></span><span style="flex:1;text-align:left">${l.label}</span>${done.has(idx)?'<span class="done-mark">✓</span>':''}`;
+      btn.onclick = () => { curSection=si; curLesson=li; render(); };
+      sb.appendChild(btn);
+    });
+  });
+}
+
+function buildMain(l, si, li) {
+  const idx = getLessonIndex(si, li);
+  const totalLessons = allLessons.length;
+  const doneCount = done.size;
+
+  const tabsHtml = l.tabs.map((t,ti) =>
+    `<button class="tab ${ti===0?'active':''}" onclick="switchTab(${ti})">${t.label}</button>`
+  ).join('');
+  const panelsHtml = l.tabs.map((t,ti) =>
+    `<div class="tab-panel ${ti===0?'active':''}" id="tp-${ti}"><div class="code-block">${t.code}</div></div>`
+  ).join('');
+
+  window.switchTab = ti => {
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===ti));
+    document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===ti));
+  };
+
+  const flat = allLessons;
+  const flatIdx = idx;
+  const hasPrev = flatIdx > 0;
+  const hasNext = flatIdx < flat.length - 1;
+
+  let prevBtn = '', nextBtn = '';
+  if (hasPrev) {
+    const p = flat[flatIdx-1];
+    prevBtn = `<button class="btn" onclick="goFlat(${flatIdx-1})">← ${p.label}</button>`;
+  }
+  if (hasNext) {
+    const n = flat[flatIdx+1];
+    nextBtn = `<button class="btn btn-p" onclick="markAndNext(${idx},${flatIdx+1})">Done — ${n.label} →</button>`;
+  } else {
+    nextBtn = `<button class="btn btn-p" onclick="sendPrompt('I have finished the Angular 15 course. What should I build first as a practice project for Angular 15?')">Build a project ↗</button>`;
+  }
+
+  return `
+    <div>
+      <div class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" style="width:${Math.round(doneCount/totalLessons*100)}%"></div></div>
+        <span class="prog-txt">${doneCount}/${totalLessons} lessons</span>
+      </div>
+    </div>
+    <div style="border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:14px">
+      <span class="lesson-tag" style="background:${l.tagBg};color:${l.tagColor}">${l.tag}</span>
+      <div class="lesson-title">${l.label}</div>
+      <div class="lesson-sub">${l.sub}</div>
+    </div>
+    <div><div class="section-label">Core concept</div><div class="concept">${l.concept}</div></div>
+    <div>
+      <div class="section-label" style="margin-bottom:0">Code examples</div>
+      <div class="tab-row">${tabsHtml}</div>
+      ${panelsHtml}
+    </div>
+    <div><div class="section-label">Key note</div><div class="note">${l.note}</div></div>
+    <div>
+      <div class="section-label">Quick quiz</div>
+      <div class="quiz-box">
+        <div class="quiz-q">${l.quiz.q}</div>
+        <div id="qopts">${l.quiz.opts.map((o,oi)=>`<button class="quiz-opt" onclick="answer(${oi})">${o}</button>`).join('')}</div>
+        <div class="quiz-fb" id="qfb"></div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      ${prevBtn}
+      <button class="btn" onclick="sendPrompt('Give me a hands-on practice exercise for Angular 15: ${l.label.replace(/'/g,'')}')" style="margin-left:auto">Practice ↗</button>
+      ${nextBtn}
+    </div>
+  `;
+}
+
+window.answer = chosen => {
+  const l = sections[curSection].lessons[curLesson];
+  document.querySelectorAll('.quiz-opt').forEach((o,i) => {
+    o.classList.add('locked');
+    if (i === l.quiz.correct) o.classList.add('correct');
+    else if (i === chosen && chosen !== l.quiz.correct) o.classList.add('wrong');
+  });
+  const fb = document.getElementById('qfb');
+  fb.style.display = 'block';
+  const ok = chosen === l.quiz.correct;
+  fb.style.color = ok ? 'var(--color-text-success)' : 'var(--color-text-secondary)';
+  fb.innerHTML = (ok ? '<strong>Correct.</strong> ' : '<strong>Not quite.</strong> ') + l.quiz.feedback;
+};
+
+window.goFlat = flatIdx => {
+  const l = allLessons[flatIdx];
+  curSection = l.si; curLesson = l.li; render();
+};
+
+window.markAndNext = (idx, nextFlat) => {
+  done.add(idx); goFlat(nextFlat);
+};
+
+function render() {
+  buildSidebar();
+  const l = sections[curSection].lessons[curLesson];
+  const si = curSection, li = curLesson;
+  document.getElementById('main').innerHTML = buildMain(l, si, li);
+  document.getElementById('main').scrollTop = 0;
+}
+
+render();
+</script>
