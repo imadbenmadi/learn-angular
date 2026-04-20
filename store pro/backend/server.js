@@ -12,9 +12,10 @@ const categoryRoutes = require("./routes/category.routes");
 
 // Initialize app
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const MONGODB_URI =
-    process.env.MONGODB_URI || "mongodb://localhost:27017/angular-store-pro";
+    process.env.MONGODB_URI ||
+    "mongodb://127.0.0.1:27017/store_pro?directConnection=true";
 
 // Middleware
 app.use(helmet());
@@ -33,6 +34,10 @@ mongoose
     })
     .catch((err) => {
         console.error("✗ MongoDB connection error:", err.message);
+        console.error("  - Is MongoDB running locally on 127.0.0.1:27017?");
+        console.error(
+            "  - If needed, set MONGODB_URI in backend/.env (and restart backend).",
+        );
         process.exit(1);
     });
 

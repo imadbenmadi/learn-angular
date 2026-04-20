@@ -59,6 +59,7 @@ cd ..
     - Download and install
 
 2. **Start MongoDB**
+
     ```bash
     # Windows Command Prompt
     mongod
@@ -123,7 +124,7 @@ npm run start:all
 
 This will:
 
-- Start backend on `http://localhost:3000`
+- Start backend on `http://localhost:3001`
 - Start frontend on `http://localhost:4200`
 - Automatically open your browser
 
@@ -134,7 +135,7 @@ This will:
 ```bash
 cd backend
 npm start
-# Output: "🚀 Server running on http://localhost:3000"
+# Output: "🚀 Server running on http://localhost:3001"
 ```
 
 **Terminal 2 - Frontend:**
@@ -196,13 +197,13 @@ Test the backend API directly:
 ### Health Check
 
 ```bash
-curl http://localhost:3000/api/health
+curl http://localhost:3001/api/health
 ```
 
 ### Register User
 
 ```bash
-curl -X POST http://localhost:3000/api/auth/register \
+curl -X POST http://localhost:3001/api/auth/register \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"test@test.com\",\"firstName\":\"John\",\"lastName\":\"Doe\",\"password\":\"password123\"}"
 ```
@@ -210,7 +211,7 @@ curl -X POST http://localhost:3000/api/auth/register \
 ### Login
 
 ```bash
-curl -X POST http://localhost:3000/api/auth/login \
+curl -X POST http://localhost:3001/api/auth/login \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"test@test.com\",\"password\":\"password123\"}"
 ```
@@ -218,7 +219,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 ### Get Products
 
 ```bash
-curl http://localhost:3000/api/products?limit=10&offset=0
+curl http://localhost:3001/api/products?limit=10&offset=0
 ```
 
 ---
@@ -260,14 +261,14 @@ MongooseError: Cannot connect to MongoDB
 ### Issue 2: Port Already in Use
 
 ```
-Error: listen EADDRINUSE :::3000
+Error: listen EADDRINUSE :::3001
 ```
 
 **Fix:**
 
 ```bash
 # Find process using port
-netstat -ano | findstr :3000
+netstat -ano | findstr :3001
 
 # Kill the process (replace 12345 with actual PID)
 taskkill /PID 12345 /F
@@ -411,8 +412,8 @@ mongo                # Connect to MongoDB (if installed)
 ### URLs
 
 - Frontend: http://localhost:4200
-- Backend API: http://localhost:3000
-- API Docs: http://localhost:3000/api/health
+- Backend API: http://localhost:3001
+- API Docs: http://localhost:3001/api/health
 
 ### Default Ports
 

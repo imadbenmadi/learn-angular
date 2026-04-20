@@ -90,7 +90,7 @@ mongod
 npm run start:all
 ```
 
-- Backend: http://localhost:3000
+- Backend: http://localhost:3001
 - Frontend: http://localhost:4200
 
 #### Option B: Run Separately
@@ -99,7 +99,7 @@ npm run start:all
 # Terminal 1: Backend
 cd backend
 npm start
-# Server running at http://localhost:3000
+# Server running at http://localhost:3001
 
 # Terminal 2: Frontend
 npm run start:frontend
@@ -282,7 +282,7 @@ If MongoDB not running, backend will fail to start.
 
 ### CORS Configuration
 
-The proxy configuration in `proxy.conf.json` routes `/api` requests to `http://localhost:3000`
+The proxy configuration in `proxy.conf.json` routes `/api` requests to `http://localhost:3001`
 
 ## 🎓 Learning Path
 
@@ -312,14 +312,14 @@ Error: connect ECONNREFUSED
 ### Port Already in Use
 
 ```
-Error: listen EADDRINUSE: address already in use :::3000
+Error: listen EADDRINUSE: address already in use :::3001
 ```
 
 **Solution**:
 
 ```bash
 # Windows
-netstat -ano | findstr :3000
+netstat -ano | findstr :3001
 taskkill /PID <PID> /F
 ```
 

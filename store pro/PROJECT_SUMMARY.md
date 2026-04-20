@@ -111,7 +111,7 @@ npm run start:all
 ### 5. Open Browser
 
 - Frontend: http://localhost:4200
-- Backend API: http://localhost:3000
+- Backend API: http://localhost:3001
 
 **Done! 🎉**
 
