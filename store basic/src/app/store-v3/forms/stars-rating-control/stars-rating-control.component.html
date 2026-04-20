@@ -5,8 +5,9 @@
         (click)="setValue(s)"
         [disabled]="disabled"
         [class.filled]="s <= value"
-        aria-label="Set rating"
+        [attr.aria-label]="'Set rating to ' + s"
+        [attr.aria-pressed]="s <= value"
     >
-        ★
+        {{ s <= value ? "★" : "☆" }}
     </button>
 </div>

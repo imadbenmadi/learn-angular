@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { PendingChangesGuard } from "./guards/pending-changes.guard";
-import { StoreV3ProductResolver } from "./resolvers/store-v3-product.resolver";
+import { pendingChangesGuard } from "./guards/pending-changes.guard";
+import { storeV3ProductResolver } from "./resolvers/store-v3-product.resolver";
 import { StoreV3TypedFormsComponent } from "./forms/store-v3-typed-forms.component";
 import { StoreV3OverviewComponent } from "./overview/store-v3-overview.component";
 import { StoreV3ProductDetailsComponent } from "./product-details/store-v3-product-details.component";
@@ -18,13 +18,13 @@ const routes: Routes = [
                 path: "product/:id",
                 component: StoreV3ProductDetailsComponent,
                 resolve: {
-                    product: StoreV3ProductResolver,
+                    product: storeV3ProductResolver,
                 },
             },
             {
                 path: "forms",
                 component: StoreV3TypedFormsComponent,
-                canDeactivate: [PendingChangesGuard],
+                canDeactivate: [pendingChangesGuard],
             },
             {
                 path: "standalone",

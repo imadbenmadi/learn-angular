@@ -1,7 +1,12 @@
 <app-top-bar></app-top-bar>
 
-<div class="container">
-  <router-outlet></router-outlet>
+<div class="container app-shell">
+    <div class="app-loading-overlay" *ngIf="isNavigating$ | async">
+        <div class="app-loading-spinner" aria-hidden="true"></div>
+        <div class="app-loading-text">Loading…</div>
+    </div>
+
+    <router-outlet></router-outlet>
 </div>
 
 <!-- 

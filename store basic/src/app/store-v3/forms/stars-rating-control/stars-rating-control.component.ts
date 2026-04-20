@@ -1,5 +1,6 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     forwardRef,
     Input,
@@ -28,12 +29,15 @@ export class StarsRatingControlComponent implements ControlValueAccessor {
     value = 0;
     disabled = false;
 
+    constructor(private cdr: ChangeDetectorRef) {}
+
     // These callbacks are provided by Angular forms.
     private onChange: (value: number) => void = () => {};
     private onTouched: () => void = () => {};
 
     writeValue(value: number | null): void {
         this.value = value ?? 0;
+        this.cdr.markForCheck();
     }
 
     registerOnChange(fn: (value: number) => void): void {
@@ -46,6 +50,7 @@ export class StarsRatingControlComponent implements ControlValueAccessor {
 
     setDisabledState(isDisabled: boolean): void {
         this.disabled = isDisabled;
+        this.cdr.markForCheck();
     }
 
     setValue(next: number): void {
@@ -56,6 +61,7 @@ export class StarsRatingControlComponent implements ControlValueAccessor {
         this.value = next;
         this.onChange(next);
         this.onTouched();
+        this.cdr.markForCheck();
     }
 
     stars(): number[] {
