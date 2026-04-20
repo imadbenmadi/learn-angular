@@ -4,10 +4,9 @@
  * Route guard to protect authenticated pages.
  */
 
-import { Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import {
-    ActivatedRouteSnapshot,
-    CanActivate,
+    CanActivateFn,
     Router,
     RouterStateSnapshot,
     UrlTree,
@@ -15,26 +14,19 @@ import {
 
 import { AuthService } from "../services/auth.service";
 
-@Injectable({
-    providedIn: "root",
-})
-export class AuthGuard implements CanActivate {
-    constructor(
-        private authService: AuthService,
-        private router: Router,
-    ) {}
+export const authGuard: CanActivateFn = (
+    _route,
+    state: RouterStateSnapshot,
+): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
 
-    canActivate(
-        _route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot,
-    ): boolean | UrlTree {
-        if (this.authService.hasToken()) {
-            return true;
-        }
-
-        // Preserve the originally requested URL so we can redirect after login.
-        return this.router.createUrlTree(["/auth/login"], {
-            queryParams: { returnUrl: state.url },
-        });
+    if (authService.hasToken()) {
+        return true;
     }
-}
+
+    // Preserve the originally requested URL so we can redirect after login.
+    return router.createUrlTree(["/auth/login"], {
+        queryParams: { returnUrl: state.url },
+    });
+};
