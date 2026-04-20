@@ -9,9 +9,9 @@
  * - Expose current user as an observable (user$)
  */
 
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, of, throwError } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 
 import { environment } from "../../../environments/environment";
@@ -80,6 +80,7 @@ export class AuthService {
                     this.setSession(res.token, res.user);
                     return res.user;
                 }),
+                catchError((err) => this.handleHttpError(err, "Login failed")),
             );
     }
 
@@ -99,6 +100,9 @@ export class AuthService {
                     this.setSession(res.token, res.user);
                     return res.user;
                 }),
+                catchError((err) =>
+                    this.handleHttpError(err, "Registration failed"),
+                ),
             );
     }
 
@@ -114,5 +118,20 @@ export class AuthService {
     private clearSession(): void {
         localStorage.removeItem(this.tokenKey);
         this.userSubject.next(null);
+    }
+
+    private handleHttpError(err: unknown, fallback: string): Observable<never> {
+        if (!(err instanceof HttpErrorResponse)) {
+            return throwError(() => new Error(fallback));
+        }
+
+        // API shape: { error: { message: string } }
+        const apiMessage = err.error?.error?.message;
+        const message =
+            typeof apiMessage === "string" && apiMessage.trim().length > 0
+                ? apiMessage
+                : fallback;
+
+        return throwError(() => new Error(message));
     }
 }

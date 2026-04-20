@@ -1,0 +1,93 @@
+<div class="orders-page">
+    <div class="card">
+        <div class="card-header header-row">
+            <div>
+                Orders
+                <div class="text-muted sub">Manage customer orders</div>
+            </div>
+            <div class="filters">
+                <label class="text-muted">Status</label>
+                <select
+                    [ngModel]="statusFilter"
+                    (ngModelChange)="applyStatusFilter($event)"
+                >
+                    <option value="">All</option>
+                    <option *ngFor="let s of statuses" [value]="s">
+                        {{ s }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="alert alert-error" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
+        <div class="loading" *ngIf="isLoading">Loading orders...</div>
+
+        <div class="table-wrap" *ngIf="!isLoading">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th class="text-right">Total</th>
+                        <th>Date</th>
+                        <th style="width: 220px">Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let o of orders">
+                        <td>{{ o.orderId || o._id }}</td>
+                        <td>{{ getUserEmail(o) }}</td>
+                        <td>{{ o.status }}</td>
+                        <td class="text-right">₹{{ o.totalAmount }}</td>
+                        <td>{{ o.createdAt | date: "mediumDate" }}</td>
+                        <td>
+                            <div class="row-actions">
+                                <select
+                                    [ngModel]="o.status"
+                                    (ngModelChange)="updateStatus(o, $event)"
+                                >
+                                    <option
+                                        *ngFor="let s of statuses"
+                                        [value]="s"
+                                    >
+                                        {{ s }}
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info" *ngIf="orders.length === 0">
+                No orders found.
+            </div>
+        </div>
+
+        <div
+            class="card-footer pager"
+            *ngIf="!isLoading && totalItems > itemsPerPage"
+        >
+            <button
+                class="btn btn-secondary btn-sm"
+                (click)="previousPage()"
+                [disabled]="currentPage === 1"
+            >
+                Previous
+            </button>
+            <small class="text-muted"
+                >Page {{ currentPage }} / {{ getTotalPages() }}</small
+            >
+            <button
+                class="btn btn-secondary btn-sm"
+                (click)="nextPage()"
+                [disabled]="currentPage >= getTotalPages()"
+            >
+                Next
+            </button>
+        </div>
+    </div>
+</div>

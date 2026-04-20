@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { StoreCatalogComponent } from "./components/catalog/catalog.component";
 import {
+    AboutComponent,
     CartComponent,
     CheckoutComponent,
     ProductDetailsComponent,
@@ -28,7 +29,7 @@ const routes: Routes = [
     },
     {
         path: "about",
-        component: StoreCatalogComponent, // Placeholder
+        component: AboutComponent,
     },
 ];
 

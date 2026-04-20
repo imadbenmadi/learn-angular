@@ -39,6 +39,32 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
+// Optional auth: if token exists and is valid, attach user info; otherwise continue as anonymous.
+const optionalAuthMiddleware = (req, res, next) => {
+    try {
+        const authHeader = req.headers["authorization"];
+        const token = authHeader && authHeader.split(" ")[1];
+
+        if (!token) {
+            return next();
+        }
+
+        jwt.verify(
+            token,
+            process.env.JWT_SECRET || "secret-key",
+            (err, decoded) => {
+                if (!err && decoded) {
+                    req.userId = decoded.id;
+                    req.userRole = decoded.role;
+                }
+                next();
+            },
+        );
+    } catch (error) {
+        next();
+    }
+};
+
 const adminMiddleware = (req, res, next) => {
     if (req.userRole !== "admin") {
         return res.status(403).json({
@@ -50,4 +76,4 @@ const adminMiddleware = (req, res, next) => {
     next();
 };
 
-module.exports = { authMiddleware, adminMiddleware };
+module.exports = { authMiddleware, optionalAuthMiddleware, adminMiddleware };

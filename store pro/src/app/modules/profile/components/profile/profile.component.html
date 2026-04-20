@@ -1,0 +1,35 @@
+<div class="container profile-page">
+    <div class="page-header">
+        <div>
+            <h1>Profile</h1>
+            <p class="text-muted">Your account details</p>
+        </div>
+        <div class="actions">
+            <a class="btn btn-secondary" routerLink="/profile/orders">Orders</a>
+            <button class="btn btn-danger" (click)="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="user$ | async as user; else missing">
+        <div class="row">
+            <div class="col">
+                <div class="label">Name</div>
+                <div class="value">
+                    {{ user.firstName }} {{ user.lastName }}
+                </div>
+            </div>
+            <div class="col">
+                <div class="label">Email</div>
+                <div class="value">{{ user.email }}</div>
+            </div>
+            <div class="col">
+                <div class="label">Role</div>
+                <div class="value">{{ user.role }}</div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #missing>
+        <div class="alert alert-warning">You are not logged in.</div>
+    </ng-template>
+</div>

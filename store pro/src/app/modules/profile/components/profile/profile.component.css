@@ -1,0 +1,26 @@
+.profile-page {
+    padding: 2rem 1rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.value {
+    font-weight: 600;
+}

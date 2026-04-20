@@ -19,6 +19,12 @@ export class CartService {
         this.loadCart();
     }
 
+    private getUnitPrice(product: Product): number {
+        const sale = product.salePrice;
+        if (sale != null && sale < product.price) return sale;
+        return product.price;
+    }
+
     /**
      * Load cart from localStorage
      */
@@ -27,7 +33,31 @@ export class CartService {
         if (savedCart) {
             try {
                 const cart = JSON.parse(savedCart);
-                this.cartSubject.next(cart);
+
+                // Normalize legacy stored items (Mongo uses _id)
+                if (cart?.items?.length) {
+                    cart.items = cart.items
+                        .filter((i: any) => i && i.product)
+                        .map((item: any) => {
+                            const product = item.product;
+                            product.id = product.id || product._id;
+
+                            const quantity = Number(item.quantity || 1);
+                            const unitPrice = this.getUnitPrice(product);
+                            return {
+                                ...item,
+                                product,
+                                quantity,
+                                totalPrice: (unitPrice || 0) * quantity,
+                            };
+                        });
+                }
+
+                this.updateCart({
+                    items: cart.items || [],
+                    totalItems: 0,
+                    totalPrice: 0,
+                });
             } catch (e) {
                 console.error("Error loading cart from storage:", e);
                 this.clearCart();
@@ -52,15 +82,16 @@ export class CartService {
             (item) => item.product.id === product.id,
         );
 
+        const unitPrice = this.getUnitPrice(product);
+
         if (existingItem) {
             existingItem.quantity += quantity;
-            existingItem.totalPrice =
-                existingItem.product.price * existingItem.quantity;
+            existingItem.totalPrice = unitPrice * existingItem.quantity;
         } else {
             cart.items.push({
                 product,
                 quantity,
-                totalPrice: product.price * quantity,
+                totalPrice: unitPrice * quantity,
             });
         }
 
@@ -88,7 +119,7 @@ export class CartService {
                 this.removeFromCart(productId);
             } else {
                 item.quantity = quantity;
-                item.totalPrice = item.product.price * quantity;
+                item.totalPrice = this.getUnitPrice(item.product) * quantity;
                 this.updateCart(cart);
             }
         }

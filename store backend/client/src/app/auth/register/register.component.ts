@@ -55,8 +55,7 @@ export class RegisterComponent {
                     this.router.navigate(["/tasks"]);
                 },
                 error: (err) => {
-                    this.errorMessage =
-                        err?.error?.error?.message ?? "Registration failed";
+                    this.errorMessage = err?.message ?? "Registration failed";
                 },
             });
     }

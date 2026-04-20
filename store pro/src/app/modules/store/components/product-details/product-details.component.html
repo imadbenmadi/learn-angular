@@ -1,0 +1,62 @@
+<div class="container details-page">
+    <button class="btn btn-secondary btn-sm" (click)="goBack()">Back</button>
+
+    <div class="alert alert-success mt" *ngIf="message">{{ message }}</div>
+    <div class="alert alert-error mt" *ngIf="errorMessage">
+        {{ errorMessage }}
+    </div>
+
+    <div class="loading mt" *ngIf="isLoading">Loading product...</div>
+
+    <div class="card mt" *ngIf="!isLoading && product as p">
+        <div class="details-layout">
+            <div class="image">
+                <img
+                    [src]="p.image"
+                    [alt]="p.name"
+                    (error)="onImageError($event)"
+                />
+            </div>
+
+            <div class="content">
+                <h2>{{ p.name }}</h2>
+                <p class="text-muted">SKU: {{ p.sku }}</p>
+
+                <div class="price">
+                    <span class="current">₹{{ getDisplayPrice(p) }}</span>
+                    <span
+                        class="original"
+                        *ngIf="p.salePrice && p.salePrice < p.price"
+                        >₹{{ p.price }}</span
+                    >
+                </div>
+
+                <div class="meta">
+                    <span *ngIf="p.rating">⭐ {{ p.rating }}/5</span>
+                    <span class="dot" *ngIf="p.rating">•</span>
+                    <span
+                        [class.inStock]="p.stock > 0"
+                        [class.outStock]="p.stock <= 0"
+                    >
+                        {{ p.stock > 0 ? "In Stock" : "Out of Stock" }}
+                    </span>
+                </div>
+
+                <p class="description">{{ p.description }}</p>
+
+                <div class="actions">
+                    <button
+                        class="btn btn-primary"
+                        (click)="addToCart()"
+                        [disabled]="p.stock <= 0"
+                    >
+                        Add to cart
+                    </button>
+                    <a class="btn btn-secondary" routerLink="/store/cart"
+                        >View cart</a
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

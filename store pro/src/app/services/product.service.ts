@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { BehaviorSubject, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { Product, ApiResponse, PaginatedResponse, Category } from "../models";
 
 @Injectable({
@@ -16,6 +17,34 @@ export class ProductService {
 
     constructor(private http: HttpClient) {
         this.loadProducts();
+    }
+
+    private normalizeProduct(product: Product): Product {
+        if (!product) return product;
+
+        const normalized: Product = {
+            ...product,
+            id: product.id || product._id,
+        };
+
+        // If backend populated the category, ensure it also has an id
+        const categoryAny: any = (normalized as any).category;
+        if (categoryAny && typeof categoryAny === "object") {
+            (normalized as any).category = {
+                ...categoryAny,
+                id: categoryAny.id || categoryAny._id,
+            };
+        }
+
+        return normalized;
+    }
+
+    private normalizeCategory(category: Category): Category {
+        if (!category) return category;
+        return {
+            ...category,
+            id: category.id || category._id,
+        };
     }
 
     /**
@@ -40,6 +69,7 @@ export class ProductService {
         offset: number = 0,
         category?: string,
         search?: string,
+        includeInactive?: boolean,
     ): Observable<PaginatedResponse<Product>> {
         let params = new HttpParams()
             .set("limit", limit.toString())
@@ -53,16 +83,36 @@ export class ProductService {
             params = params.set("search", search);
         }
 
-        return this.http.get<PaginatedResponse<Product>>(this.apiUrl, {
-            params,
-        });
+        if (includeInactive) {
+            params = params.set("includeInactive", "true");
+        }
+
+        return this.http
+            .get<PaginatedResponse<Product>>(this.apiUrl, {
+                params,
+            })
+            .pipe(
+                map((response) => ({
+                    ...response,
+                    data: (response.data || []).map((p) =>
+                        this.normalizeProduct(p),
+                    ),
+                })),
+            );
     }
 
     /**
      * Get single product by ID
      */
     getProductById(id: string): Observable<ApiResponse<Product>> {
-        return this.http.get<ApiResponse<Product>>(`${this.apiUrl}/${id}`);
+        return this.http.get<ApiResponse<Product>>(`${this.apiUrl}/${id}`).pipe(
+            map((response) => ({
+                ...response,
+                data: response.data
+                    ? this.normalizeProduct(response.data)
+                    : response.data,
+            })),
+        );
     }
 
     /**
@@ -101,8 +151,75 @@ export class ProductService {
     /**
      * Get all categories
      */
-    getCategories(): Observable<ApiResponse<Category[]>> {
-        return this.http.get<ApiResponse<Category[]>>("/api/categories");
+    getCategories(): Observable<ApiResponse<Category[]>>;
+    getCategories(
+        includeInactive?: boolean,
+    ): Observable<ApiResponse<Category[]>>;
+    /**
+     * Get all categories. For admin usage you can pass includeInactive=true.
+     */
+    getCategories(
+        includeInactive: boolean = false,
+    ): Observable<ApiResponse<Category[]>> {
+        let params = new HttpParams();
+        if (includeInactive) {
+            params = params.set("includeInactive", "true");
+        }
+
+        return this.http
+            .get<ApiResponse<Category[]>>("/api/categories", { params })
+            .pipe(
+                map((response) => ({
+                    ...response,
+                    data: response.data
+                        ? response.data.map((c) => this.normalizeCategory(c))
+                        : response.data,
+                })),
+            );
+    }
+
+    /**
+     * Create category (admin only)
+     */
+    createCategory(
+        category: Partial<Category>,
+    ): Observable<ApiResponse<Category>> {
+        return this.http
+            .post<ApiResponse<Category>>("/api/categories", category)
+            .pipe(
+                map((response) => ({
+                    ...response,
+                    data: response.data
+                        ? this.normalizeCategory(response.data)
+                        : response.data,
+                })),
+            );
+    }
+
+    /**
+     * Update category (admin only)
+     */
+    updateCategory(
+        id: string,
+        category: Partial<Category>,
+    ): Observable<ApiResponse<Category>> {
+        return this.http
+            .put<ApiResponse<Category>>(`/api/categories/${id}`, category)
+            .pipe(
+                map((response) => ({
+                    ...response,
+                    data: response.data
+                        ? this.normalizeCategory(response.data)
+                        : response.data,
+                })),
+            );
+    }
+
+    /**
+     * Delete category (admin only)
+     */
+    deleteCategory(id: string): Observable<ApiResponse<null>> {
+        return this.http.delete<ApiResponse<null>>(`/api/categories/${id}`);
     }
 
     /**

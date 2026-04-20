@@ -1,0 +1,184 @@
+<div class="page">
+    <div class="card form-card">
+        <div class="card-header">
+            {{ editingId ? "Edit Product" : "Create Product" }}
+        </div>
+
+        <div class="alert alert-error" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
+        <div class="alert alert-success" *ngIf="successMessage">
+            {{ successMessage }}
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="grid">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input formControlName="name" />
+                </div>
+                <div class="form-group">
+                    <label>SKU</label>
+                    <input formControlName="sku" />
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select formControlName="category">
+                        <option value="">Select...</option>
+                        <option
+                            *ngFor="let c of categories"
+                            [value]="c.id || c._id"
+                        >
+                            {{ c.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Stock</label>
+                    <input type="number" min="0" formControlName="stock" />
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        formControlName="price"
+                    />
+                </div>
+                <div class="form-group">
+                    <label>Sale Price (optional)</label>
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        formControlName="salePrice"
+                    />
+                </div>
+                <div class="form-group full">
+                    <label>Image URL</label>
+                    <input formControlName="image" />
+                </div>
+                <div class="form-group full">
+                    <label>Description</label>
+                    <textarea rows="3" formControlName="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Active</label>
+                    <select formControlName="isActive">
+                        <option [ngValue]="true">Active</option>
+                        <option [ngValue]="false">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card-footer actions">
+                <button
+                    class="btn btn-secondary"
+                    type="button"
+                    (click)="startCreate()"
+                >
+                    Clear
+                </button>
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                    [disabled]="isSaving"
+                >
+                    {{
+                        isSaving ? "Saving..." : editingId ? "Update" : "Create"
+                    }}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card mt">
+        <div class="card-header">Products</div>
+
+        <div class="loading" *ngIf="isLoading">Loading products...</div>
+
+        <div class="table-wrap" *ngIf="!isLoading">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40%">Product</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th class="text-right">Price</th>
+                        <th>Status</th>
+                        <th style="width: 220px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of products">
+                        <td>
+                            <div class="product-cell">
+                                <img
+                                    class="thumb"
+                                    [src]="p.image"
+                                    [alt]="p.name"
+                                />
+                                <div>
+                                    <div class="name">{{ p.name }}</div>
+                                    <small class="text-muted">{{
+                                        p.sku
+                                    }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ getCategoryName(p) }}</td>
+                        <td>{{ p.stock }}</td>
+                        <td class="text-right">
+                            ₹{{
+                                p.salePrice && p.salePrice < p.price
+                                    ? p.salePrice
+                                    : p.price
+                            }}
+                        </td>
+                        <td>
+                            <span
+                                class="badge"
+                                [class.badge-muted]="p.isActive === false"
+                            >
+                                {{
+                                    p.isActive === false ? "Inactive" : "Active"
+                                }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="row-actions">
+                                <button
+                                    class="btn btn-secondary btn-sm"
+                                    (click)="startEdit(p)"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    class="btn btn-secondary btn-sm"
+                                    (click)="toggleActive(p)"
+                                >
+                                    {{
+                                        p.isActive === false
+                                            ? "Activate"
+                                            : "Deactivate"
+                                    }}
+                                </button>
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    (click)="delete(p)"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info" *ngIf="products.length === 0">
+                No products found.
+            </div>
+        </div>
+    </div>
+</div>

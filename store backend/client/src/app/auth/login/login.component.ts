@@ -56,9 +56,7 @@ export class LoginComponent {
                     this.router.navigateByUrl(returnUrl);
                 },
                 error: (err) => {
-                    // API errors are returned as: { error: { message: string } }
-                    this.errorMessage =
-                        err?.error?.error?.message ?? "Login failed";
+                    this.errorMessage = err?.message ?? "Login failed";
                 },
             });
     }

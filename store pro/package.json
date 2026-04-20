@@ -8,6 +8,7 @@
         "start:frontend": "ng serve --open",
         "start:backend": "cd backend && npm start",
         "start:all": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+        "seed:backend": "cd backend && npm run seed",
         "build": "ng build",
         "build:prod": "ng build --configuration production",
         "watch": "ng build --watch --configuration development",

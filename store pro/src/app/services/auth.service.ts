@@ -141,10 +141,13 @@ export class AuthService {
      * Handle authentication response
      */
     private handleAuthResponse(response: AuthResponse): void {
-        if (response.token && response.user) {
-            localStorage.setItem(this.TOKEN_KEY, response.token);
-            localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
-            this.currentUserSubject.next(response.user);
+        const token = response?.data?.token;
+        const user = response?.data?.user;
+
+        if (token && user) {
+            localStorage.setItem(this.TOKEN_KEY, token);
+            localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+            this.currentUserSubject.next(user);
             this.isAuthenticatedSubject.next(true);
         }
     }

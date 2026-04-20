@@ -10,5 +10,5 @@ export const environment = {
     production: false,
 
     // Express API base URL
-    apiBaseUrl: "http://localhost:3000/api",
+    apiBaseUrl: "http://localhost:3002/api",
 };

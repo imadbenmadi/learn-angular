@@ -192,4 +192,89 @@ router.post("/verify", authMiddleware, async (req, res) => {
     }
 });
 
+/**
+ * Update profile (authenticated)
+ */
+router.put(
+    "/profile",
+    authMiddleware,
+    [
+        body("firstName").optional().trim().notEmpty(),
+        body("lastName").optional().trim().notEmpty(),
+        body("phone").optional({ nullable: true }).trim(),
+        body("avatar").optional({ nullable: true }).trim(),
+        body("addresses").optional({ nullable: true }).isArray(),
+    ],
+    async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Validation error",
+                    errors: errors.array(),
+                    statusCode: 400,
+                });
+            }
+
+            const updates = {};
+            if (req.body.firstName !== undefined)
+                updates.firstName = req.body.firstName;
+            if (req.body.lastName !== undefined)
+                updates.lastName = req.body.lastName;
+            if (req.body.phone !== undefined) updates.phone = req.body.phone;
+            if (req.body.avatar !== undefined) updates.avatar = req.body.avatar;
+            if (req.body.addresses !== undefined)
+                updates.addresses = req.body.addresses;
+
+            const user = await User.findByIdAndUpdate(req.userId, updates, {
+                new: true,
+                runValidators: true,
+            });
+
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                    statusCode: 404,
+                });
+            }
+
+            const token = jwt.sign(
+                { id: user._id, role: user.role },
+                JWT_SECRET,
+                {
+                    expiresIn: "7d",
+                },
+            );
+
+            res.json({
+                success: true,
+                message: "Profile updated successfully",
+                data: {
+                    token,
+                    user: {
+                        _id: user._id,
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        phone: user.phone,
+                        avatar: user.avatar,
+                        addresses: user.addresses,
+                        role: user.role,
+                        isActive: user.isActive,
+                    },
+                },
+                statusCode: 200,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Profile update error",
+                statusCode: 500,
+            });
+        }
+    },
+);
+
 module.exports = router;

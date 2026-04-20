@@ -1,24 +1,51 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 const Product = require("../models/Product");
-const { authMiddleware, adminMiddleware } = require("../middleware/auth");
+const Category = require("../models/Category");
+const {
+    authMiddleware,
+    optionalAuthMiddleware,
+    adminMiddleware,
+} = require("../middleware/auth");
 
 const router = express.Router();
 
 /**
  * Get all products with pagination and filtering
  */
-router.get("/", async (req, res) => {
+router.get("/", optionalAuthMiddleware, async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 20;
         const offset = parseInt(req.query.offset) || 0;
         const category = req.query.category;
         const search = req.query.search;
+        const includeInactive =
+            req.query.includeInactive === "true" ||
+            req.query.includeInactive === "1";
+        const isAdmin = req.userRole === "admin";
 
-        let query = { isActive: true };
+        let query = {};
+        if (!(includeInactive && isAdmin)) {
+            query.isActive = true;
+        }
 
         if (category) {
-            query.category = category;
+            // Accept either category ObjectId or category slug
+            if (mongoose.Types.ObjectId.isValid(category)) {
+                query.category = category;
+            } else {
+                const categoryQuery = { slug: category };
+                if (!(includeInactive && isAdmin)) {
+                    categoryQuery.isActive = true;
+                }
+
+                const categoryDoc =
+                    await Category.findOne(categoryQuery).select("_id");
+
+                // If slug doesn't exist, force empty results (rather than returning all)
+                query.category = categoryDoc ? categoryDoc._id : null;
+            }
         }
 
         if (search) {

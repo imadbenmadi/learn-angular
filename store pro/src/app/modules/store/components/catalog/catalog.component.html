@@ -54,6 +54,10 @@
 
         <!-- Products Grid -->
         <div class="products-section">
+            <div class="alert alert-success" *ngIf="cartMessage">
+                {{ cartMessage }}
+            </div>
+
             <div *ngIf="isLoading" class="loading">
                 <p>Loading products...</p>
             </div>

@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { StoreRoutingModule } from "./store-routing.module";
 import { StoreCatalogComponent } from "./components/catalog/catalog.component";
 import {
+    AboutComponent,
     CartComponent,
     CheckoutComponent,
     ProductDetailsComponent,
@@ -16,6 +17,7 @@ import { ProductCardComponent } from "./components/product-card/product-card.com
         ProductDetailsComponent,
         CartComponent,
         CheckoutComponent,
+        AboutComponent,
         ProductCardComponent,
     ],
     imports: [

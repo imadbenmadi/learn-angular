@@ -8,7 +8,7 @@ export interface Product {
     description: string;
     price: number;
     salePrice?: number;
-    category: string;
+    category: string | Category;
     image: string;
     images?: string[];
     stock: number;
@@ -16,6 +16,7 @@ export interface Product {
     reviews?: number;
     sku: string;
     specifications?: Record<string, string>;
+    isActive?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -152,10 +153,12 @@ export interface PaginatedResponse<T> {
     statusCode: number;
 }
 
-export interface AuthResponse {
+export interface AuthPayload {
     token: string;
     user: User;
 }
+
+export type AuthResponse = ApiResponse<AuthPayload>;
 
 export interface LoginRequest {
     email: string;

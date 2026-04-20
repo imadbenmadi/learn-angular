@@ -29,6 +29,9 @@ export class StoreCatalogComponent implements OnInit, OnDestroy {
     // Loading state
     isLoading = false;
 
+    // UX message
+    cartMessage: string | null = null;
+
     private destroy$ = new Subject<void>();
 
     constructor(
@@ -179,7 +182,10 @@ export class StoreCatalogComponent implements OnInit, OnDestroy {
      */
     addToCart(product: Product): void {
         this.cartService.addToCart(product, 1);
-        alert(`${product.name} added to cart!`);
+        this.cartMessage = `${product.name} added to cart.`;
+        window.setTimeout(() => {
+            this.cartMessage = null;
+        }, 2000);
     }
 
     /**

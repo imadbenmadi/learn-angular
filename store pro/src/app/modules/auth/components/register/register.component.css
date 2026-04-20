@@ -1,0 +1,32 @@
+.auth-page {
+    padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 520px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+.auth-footer {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -8,7 +8,6 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 
-import { env } from "./config/env";
 import { errorMiddleware } from "./middleware/error.middleware";
 import { authRouter } from "./routes/auth.routes";
 import { tasksRouter } from "./routes/tasks.routes";
@@ -20,12 +19,9 @@ export function createApp(): express.Express {
     // Logs method/path + response time.
     app.use(morgan("dev"));
 
-    // Allow the Angular dev server to call this API.
-    app.use(
-        cors({
-            origin: env.CORS_ORIGIN,
-        }),
-    );
+    // Allow all origins in development, including OPTIONS preflight.
+    app.use(cors());
+    app.options("*", cors());
 
     // Parse JSON bodies (req.body).
     app.use(express.json());

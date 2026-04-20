@@ -1,21 +1,27 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
-import { Component } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-@Component({
-    selector: "app-admin",
-    template:
-        '<div class="container"><h2>Admin Dashboard</h2><p>Component coming soon...</p></div>',
-    styles: [".container { padding: 2rem; }"],
-})
-export class AdminComponent {}
+import { AdminRoutingModule } from "./admin-routing.module";
+import {
+    AdminCategoriesComponent,
+    AdminOrdersComponent,
+    AdminProductsComponent,
+    AdminShellComponent,
+} from "./components";
 
 @NgModule({
-    declarations: [AdminComponent],
+    declarations: [
+        AdminShellComponent,
+        AdminProductsComponent,
+        AdminCategoriesComponent,
+        AdminOrdersComponent,
+    ],
     imports: [
         CommonModule,
-        RouterModule.forChild([{ path: "", component: AdminComponent }]),
+        FormsModule,
+        ReactiveFormsModule,
+        AdminRoutingModule,
     ],
 })
 export class AdminModule {}

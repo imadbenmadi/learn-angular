@@ -210,11 +210,20 @@ angular-store-pro/
 - **StoreCatalogComponent**: Product listing with filtering
 - **ProductCardComponent**: Reusable product card
 - **CartComponent**: Shopping cart view
-- **CheckoutComponent**: Order checkout (stub)
-- **LoginComponent**: User authentication (stub)
-- **AdminComponent**: Dashboard (stub)
+- **ProductDetailsComponent**: Product detail view
+- **CheckoutComponent**: Checkout form + order creation
+- **LoginComponent**: User authentication
+- **RegisterComponent**: User registration
+- **ProfileModule**: Profile + order history
+- **AdminComponent**: Dashboard (placeholder)
 
 ## 🧪 Testing the Application
+
+### Seed Demo Data
+
+```bash
+npm run seed:backend
+```
 
 ### Sample Users (After Seeding)
 

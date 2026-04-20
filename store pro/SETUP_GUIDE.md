@@ -152,7 +152,13 @@ npm run start:frontend
 ### First Time Setup
 
 1. **Open browser**: http://localhost:4200
-2. **See the home page** with product catalog (may show "No products found" initially)
+2. **See the home page** with product catalog
+
+If the catalog is empty, seed demo data:
+
+```bash
+npm run seed:backend
+```
 
 ### Try These Actions:
 
