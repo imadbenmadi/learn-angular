@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { AgGridAngular } from "ag-grid-angular";
 
 import { AdminRoutingModule } from "./admin-routing.module";
 import {
@@ -21,6 +22,7 @@ import {
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        AgGridAngular,
         AdminRoutingModule,
     ],
 })

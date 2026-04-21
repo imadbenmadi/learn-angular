@@ -10,6 +10,7 @@ const productRoutes = require("./routes/product.routes");
 const orderRoutes = require("./routes/order.routes");
 const categoryRoutes = require("./routes/category.routes");
 const adminRoutes = require("./routes/admin.routes");
+const imageRoutes = require("./routes/image.routes");
 
 // Initialize app
 const app = express();
@@ -35,10 +36,6 @@ mongoose
     })
     .catch((err) => {
         console.error("✗ MongoDB connection error:", err.message);
-        console.error("  - Is MongoDB running locally on 127.0.0.1:27017?");
-        console.error(
-            "  - If needed, set MONGODB_URI in backend/.env (and restart backend).",
-        );
         process.exit(1);
     });
 
@@ -54,6 +51,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/images", imageRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

@@ -68,51 +68,15 @@
         <div class="loading" *ngIf="isLoading">Loading categories...</div>
 
         <div class="table-wrap" *ngIf="!isLoading">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 40%">Category</th>
-                        <th>Slug</th>
-                        <th>Status</th>
-                        <th style="width: 180px">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let c of categories">
-                        <td>
-                            <div class="name">{{ c.name }}</div>
-                            <small class="text-muted">{{
-                                c.description || ""
-                            }}</small>
-                        </td>
-                        <td>{{ c.slug }}</td>
-                        <td>
-                            <span
-                                class="badge"
-                                [class.badge-muted]="!c.isActive"
-                            >
-                                {{ c.isActive ? "Active" : "Inactive" }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="row-actions">
-                                <button
-                                    class="btn btn-secondary btn-sm"
-                                    (click)="startEdit(c)"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    class="btn btn-danger btn-sm"
-                                    (click)="delete(c)"
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="width: 100%; height: 420px"
+                [rowData]="categories"
+                [columnDefs]="columnDefs"
+                [defaultColDef]="defaultColDef"
+                [context]="context"
+                (gridReady)="onGridReady($event)"
+            ></ag-grid-angular>
 
             <div class="alert alert-info" *ngIf="categories.length === 0">
                 No categories found.

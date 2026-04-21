@@ -201,7 +201,13 @@ export class ProductCardComponent {
         this.router.navigate(["/store/product", this.product.id]);
     }
 
-    onImageError(event: any): void {
-        event.target.src = "https://via.placeholder.com/200?text=No+Image";
+    onImageError(event: Event): void {
+        const img = event.target as HTMLImageElement | null;
+        if (!img) return;
+
+        if (img.dataset["fallbackApplied"] === "1") return;
+        img.dataset["fallbackApplied"] = "1";
+
+        img.src = "/api/images/placeholder?w=200&h=200&text=No%20Image";
     }
 }

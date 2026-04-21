@@ -123,7 +123,7 @@ angular-store-pro/
 │   │   │   └── admin/          # Admin dashboard module
 │   │   ├── app.component.ts    # Main layout component
 │   │   └── app.module.ts       # Root module
-│   └── styles.css              # Global styles
+│   └── styles.scss              # Global styles
 │
 ├── backend/                      # Express.js Backend
 │   ├── models/                 # MongoDB schemas

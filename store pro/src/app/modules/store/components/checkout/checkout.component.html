@@ -17,9 +17,9 @@
     </div>
 
     <div class="layout" *ngIf="cart as c">
-        <div class="card">
+        <div class="card" *ngIf="step === 'details'">
             <div class="card-header">Shipping Details</div>
-            <form [formGroup]="form" (ngSubmit)="placeOrder()">
+            <form [formGroup]="form" (ngSubmit)="continueToPayment()">
                 <div class="grid">
                     <div class="form-group">
                         <label>First Name</label>
@@ -74,10 +74,46 @@
                         type="submit"
                         [disabled]="isSubmitting || c.items.length === 0"
                     >
-                        {{ isSubmitting ? "Placing order..." : "Place order" }}
+                        Continue to payment
                     </button>
                 </div>
             </form>
+        </div>
+
+        <div class="card" *ngIf="step === 'payment'">
+            <div class="card-header">Payment Gateway (Demo)</div>
+
+            <div class="alert alert-info">
+                This is a static demo gateway. No real card is charged.
+            </div>
+
+            <div class="summary-row">
+                <span class="text-muted">Amount</span>
+                <span>₹{{ c.totalPrice }}</span>
+            </div>
+            <div class="summary-row">
+                <span class="text-muted">Method</span>
+                <span>{{ form.value.paymentMethod }}</span>
+            </div>
+
+            <div class="card-footer actions">
+                <button
+                    class="btn btn-secondary"
+                    type="button"
+                    (click)="backToDetails()"
+                    [disabled]="isSubmitting"
+                >
+                    Back
+                </button>
+                <button
+                    class="btn btn-primary"
+                    type="button"
+                    (click)="payNow()"
+                    [disabled]="isSubmitting || c.items.length === 0"
+                >
+                    {{ isSubmitting ? "Processing payment..." : "Pay now" }}
+                </button>
+            </div>
         </div>
 
         <div class="card summary">
@@ -91,7 +127,7 @@
                 <span>₹{{ c.totalPrice }}</span>
             </div>
             <small class="text-muted">
-                You must be logged in to place an order.
+                You must be logged in to complete checkout.
             </small>
         </div>
     </div>

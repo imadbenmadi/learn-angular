@@ -132,7 +132,7 @@ angular-store-pro/
 ├── src/                        ← Angular Frontend
 │   ├── main.ts                 ← Bootstrap file
 │   ├── index.html              ← HTML entry
-│   ├── styles.css              ← Global styles
+│   ├── styles.scss              ← Global styles
 │   └── app/
 │       ├── app.module.ts       ← Root module
 │       ├── app.component.ts    ← Main component

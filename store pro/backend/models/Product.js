@@ -39,7 +39,7 @@ const productSchema = new mongoose.Schema(
             required: [true, "Product stock is required"],
             default: 0,
         },
-        sku: {
+        sku: { // Stock Keeping Unit
             type: String,
             required: [true, "Product SKU is required"],
             unique: true,

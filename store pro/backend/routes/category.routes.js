@@ -168,8 +168,11 @@ router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
             return res.json({
                 success: true,
                 message:
-                    "Category is referenced by products and was deactivated instead of deleted",
-                data: null,
+                    "Category is referenced by products and was archived (deactivated) instead of deleted",
+                data: {
+                    action: "archived",
+                    referencedProducts: referencedCount,
+                },
                 statusCode: 200,
             });
         }
@@ -178,7 +181,7 @@ router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
         res.json({
             success: true,
             message: "Category deleted successfully",
-            data: null,
+            data: { action: "deleted" },
             statusCode: 200,
         });
     } catch (error) {

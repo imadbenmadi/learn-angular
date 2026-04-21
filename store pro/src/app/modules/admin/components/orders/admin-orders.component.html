@@ -25,42 +25,15 @@
         <div class="loading" *ngIf="isLoading">Loading orders...</div>
 
         <div class="table-wrap" *ngIf="!isLoading">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Order</th>
-                        <th>Customer</th>
-                        <th>Status</th>
-                        <th class="text-right">Total</th>
-                        <th>Date</th>
-                        <th style="width: 220px">Update</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let o of orders">
-                        <td>{{ o.orderId || o._id }}</td>
-                        <td>{{ getUserEmail(o) }}</td>
-                        <td>{{ o.status }}</td>
-                        <td class="text-right">₹{{ o.totalAmount }}</td>
-                        <td>{{ o.createdAt | date: "mediumDate" }}</td>
-                        <td>
-                            <div class="row-actions">
-                                <select
-                                    [ngModel]="o.status"
-                                    (ngModelChange)="updateStatus(o, $event)"
-                                >
-                                    <option
-                                        *ngFor="let s of statuses"
-                                        [value]="s"
-                                    >
-                                        {{ s }}
-                                    </option>
-                                </select>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="width: 100%; height: 520px"
+                [rowData]="orders"
+                [columnDefs]="columnDefs"
+                [defaultColDef]="defaultColDef"
+                [context]="context"
+                (gridReady)="onGridReady($event)"
+            ></ag-grid-angular>
 
             <div class="alert alert-info" *ngIf="orders.length === 0">
                 No orders found.

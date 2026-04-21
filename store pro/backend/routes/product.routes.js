@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const Category = require("../models/Category");
+const Order = require("../models/Order");
 const {
     authMiddleware,
     optionalAuthMiddleware,
@@ -33,7 +34,17 @@ router.get("/", optionalAuthMiddleware, async (req, res) => {
         if (category) {
             // Accept either category ObjectId or category slug
             if (mongoose.Types.ObjectId.isValid(category)) {
-                query.category = category;
+                if (!(includeInactive && isAdmin)) {
+                    const categoryDoc = await Category.findOne({
+                        _id: category,
+                        isActive: true,
+                    }).select("_id");
+
+                    // If category isn't active (or doesn't exist), force empty results
+                    query.category = categoryDoc ? categoryDoc._id : null;
+                } else {
+                    query.category = category;
+                }
             } else {
                 const categoryQuery = { slug: category };
                 if (!(includeInactive && isAdmin)) {
@@ -46,6 +57,13 @@ router.get("/", optionalAuthMiddleware, async (req, res) => {
                 // If slug doesn't exist, force empty results (rather than returning all)
                 query.category = categoryDoc ? categoryDoc._id : null;
             }
+        } else if (!(includeInactive && isAdmin)) {
+            // Hide products that belong to inactive categories for non-admin usage
+            const activeCategoryDocs = await Category.find({ isActive: true })
+                .select("_id")
+                .lean();
+            const activeCategoryIds = activeCategoryDocs.map((c) => c._id);
+            query.category = { $in: activeCategoryIds };
         }
 
         if (search) {
@@ -84,8 +102,13 @@ router.get("/", optionalAuthMiddleware, async (req, res) => {
 /**
  * Get product by ID
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", optionalAuthMiddleware, async (req, res) => {
     try {
+        const includeInactive =
+            req.query.includeInactive === "true" ||
+            req.query.includeInactive === "1";
+        const isAdmin = req.userRole === "admin";
+
         const product = await Product.findById(req.params.id).populate(
             "category",
         );
@@ -95,6 +118,30 @@ router.get("/:id", async (req, res) => {
                 message: "Product not found",
                 statusCode: 404,
             });
+        }
+
+        // For non-admin users, only expose active products in active categories
+        if (!(includeInactive && isAdmin)) {
+            if (product.isActive !== true) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Product not found",
+                    statusCode: 404,
+                });
+            }
+
+            const categoryDoc = product.category;
+            if (
+                !categoryDoc ||
+                (typeof categoryDoc === "object" &&
+                    categoryDoc.isActive === false)
+            ) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Product not found",
+                    statusCode: 404,
+                });
+            }
         }
 
         res.json({
@@ -196,8 +243,8 @@ router.put("/:id", authMiddleware, adminMiddleware, async (req, res) => {
  */
 router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     try {
-        const product = await Product.findByIdAndDelete(req.params.id);
-
+        const id = req.params.id;
+        const product = await Product.findById(id);
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -206,9 +253,36 @@ router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
             });
         }
 
+        // If the product is referenced by any order, archive it instead of deleting.
+        const referencedOrders = await Order.countDocuments({
+            "items.productId": product._id,
+        });
+
+        if (referencedOrders > 0) {
+            await Product.findByIdAndUpdate(
+                id,
+                { isActive: false },
+                { new: true },
+            );
+
+            return res.json({
+                success: true,
+                message:
+                    "Product is referenced by orders and was archived (deactivated) instead of deleted",
+                data: {
+                    action: "archived",
+                    referencedOrders,
+                },
+                statusCode: 200,
+            });
+        }
+
+        await Product.findByIdAndDelete(id);
+
         res.json({
             success: true,
             message: "Product deleted successfully",
+            data: { action: "deleted" },
             statusCode: 200,
         });
     } catch (error) {

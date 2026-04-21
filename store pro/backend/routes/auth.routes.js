@@ -153,6 +153,7 @@ router.post(
 /**
  * Verify token
  */
+
 router.post("/verify", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.userId);

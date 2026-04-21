@@ -16,6 +16,8 @@ export class CheckoutComponent implements OnDestroy {
     form: FormGroup;
     cart: Cart | null = null;
 
+    step: "details" | "payment" = "details";
+
     isSubmitting = false;
     errorMessage: string | null = null;
     successMessage: string | null = null;
@@ -51,7 +53,7 @@ export class CheckoutComponent implements OnDestroy {
         this.destroy$.complete();
     }
 
-    placeOrder(): void {
+    continueToPayment(): void {
         this.errorMessage = null;
         this.successMessage = null;
 
@@ -66,12 +68,70 @@ export class CheckoutComponent implements OnDestroy {
             return;
         }
 
+        this.step = "payment";
+    }
+
+    backToDetails(): void {
+        this.errorMessage = null;
+        this.successMessage = null;
+        this.step = "details";
+    }
+
+    payNow(): void {
+        this.errorMessage = null;
+        this.successMessage = null;
+
+        if (!this.cart || this.cart.items.length === 0) {
+            this.errorMessage = "Your cart is empty.";
+            this.step = "details";
+            return;
+        }
+
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            this.errorMessage = "Please complete the required fields.";
+            this.step = "details";
+            return;
+        }
+
         this.isSubmitting = true;
 
+        // Static payment gateway simulation (no real payment provider).
+        // Keep it deterministic for demo: always succeeds after a short delay.
+        window.setTimeout(() => {
+            const order = this.buildOrderPayload();
+
+            this.orderService
+                .createOrder(order)
+                .pipe(take(1))
+                .subscribe({
+                    next: () => {
+                        this.cartService.clearCart();
+                        this.successMessage =
+                            "Payment successful. Order placed successfully.";
+                        this.isSubmitting = false;
+                        window.setTimeout(
+                            () => this.router.navigate(["/store"]),
+                            1200,
+                        );
+                    },
+                    error: (err) => {
+                        this.errorMessage =
+                            err?.error?.message ||
+                            "Failed to place order. Please try again.";
+                        this.isSubmitting = false;
+                        this.step = "details";
+                    },
+                });
+        }, 600);
+    }
+
+    private buildOrderPayload(): Order {
         const v = this.form.value;
+
         const order: Order = {
             userId: "", // backend sets this from JWT
-            items: this.cart.items.map((item) => ({
+            items: (this.cart?.items || []).map((item) => ({
                 productId: (item.product.id || item.product._id) as string,
                 productName: item.product.name,
                 price: item.product.salePrice || item.product.price,
@@ -80,7 +140,7 @@ export class CheckoutComponent implements OnDestroy {
                     (item.product.salePrice || item.product.price) *
                     item.quantity,
             })),
-            totalAmount: this.cart.totalPrice,
+            totalAmount: this.cart?.totalPrice || 0,
             shippingAddress: {
                 firstName: v.firstName,
                 lastName: v.lastName,
@@ -96,26 +156,10 @@ export class CheckoutComponent implements OnDestroy {
             paymentMethod: v.paymentMethod,
         };
 
-        this.orderService
-            .createOrder(order)
-            .pipe(take(1))
-            .subscribe({
-                next: () => {
-                    this.cartService.clearCart();
-                    this.successMessage = "Order placed successfully.";
-                    this.isSubmitting = false;
-                    window.setTimeout(
-                        () => this.router.navigate(["/store"]),
-                        1200,
-                    );
-                },
-                error: (err) => {
-                    this.errorMessage =
-                        err?.error?.message ||
-                        "Failed to place order. Please try again.";
-                    this.isSubmitting = false;
-                },
-            });
+        // Mark as paid in the demo gateway so admin revenue metrics can work once delivered.
+        (order as any).paymentStatus = "completed";
+
+        return order;
     }
 
     goToCart(): void {

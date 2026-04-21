@@ -21,9 +21,12 @@ export class CartComponent {
 
     onImageError(event: Event): void {
         const img = event.target as HTMLImageElement | null;
-        if (img) {
-            img.src = "https://via.placeholder.com/80?text=No+Image";
-        }
+        if (!img) return;
+
+        if (img.dataset["fallbackApplied"] === "1") return;
+        img.dataset["fallbackApplied"] = "1";
+
+        img.src = "/api/images/placeholder?w=80&h=80&text=No%20Image";
     }
 
     trackByProductId(_: number, item: CartItem): string {

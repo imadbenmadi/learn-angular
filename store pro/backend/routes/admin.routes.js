@@ -42,8 +42,8 @@ router.get("/stats", authMiddleware, adminMiddleware, async (req, res) => {
                 },
                 {
                     $group: {
-                        _id: null,
-                        totalRevenue: { $sum: "$totalAmount" },
+                        _id: null, // single group for total revenue , don’t group by anything → treat everything as one group
+                        totalRevenue: { $sum: "$totalAmount" }, // add all totalAmount values together
                     },
                 },
             ]),

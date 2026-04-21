@@ -12,26 +12,32 @@ const MONGODB_URI =
     process.env.MONGODB_URI ||
     "mongodb://127.0.0.1:27017/store_pro?directConnection=true";
 
+function placeholderImage(w, h, text) {
+    return `/api/images/placeholder?w=${w}&h=${h}&text=${encodeURIComponent(
+        text,
+    )}`;
+}
+
 const categoriesSeed = [
     {
         name: "Electronics",
         slug: "electronics",
         description: "Phones, laptops, audio and accessories.",
-        image: "https://via.placeholder.com/600x300?text=Electronics",
+        image: placeholderImage(600, 300, "Electronics"),
         isActive: true,
     },
     {
         name: "Home & Kitchen",
         slug: "home-kitchen",
         description: "Essentials to upgrade your home.",
-        image: "https://via.placeholder.com/600x300?text=Home+%26+Kitchen",
+        image: placeholderImage(600, 300, "Home & Kitchen"),
         isActive: true,
     },
     {
         name: "Fashion",
         slug: "fashion",
         description: "Everyday style for everyone.",
-        image: "https://via.placeholder.com/600x300?text=Fashion",
+        image: placeholderImage(600, 300, "Fashion"),
         isActive: true,
     },
 ];
@@ -45,10 +51,10 @@ const productsSeed = [
         price: 79.99,
         salePrice: 59.99,
         categorySlug: "electronics",
-        image: "https://via.placeholder.com/600?text=Wireless+Headphones",
+        image: placeholderImage(600, 600, "Wireless Headphones"),
         images: [
-            "https://via.placeholder.com/600?text=Headphones+1",
-            "https://via.placeholder.com/600?text=Headphones+2",
+            placeholderImage(600, 600, "Headphones 1"),
+            placeholderImage(600, 600, "Headphones 2"),
         ],
         stock: 25,
         rating: 4.5,
@@ -67,7 +73,7 @@ const productsSeed = [
             "A fast, lightweight laptop for work and learning with a sharp display.",
         price: 899.0,
         categorySlug: "electronics",
-        image: "https://via.placeholder.com/600?text=Ultrabook+Laptop",
+        image: placeholderImage(600, 600, 'Ultrabook Laptop 14"'),
         stock: 12,
         rating: 4.2,
         reviews: 58,
@@ -85,7 +91,7 @@ const productsSeed = [
             "Brew great coffee in minutes with simple controls and easy cleanup.",
         price: 49.99,
         categorySlug: "home-kitchen",
-        image: "https://via.placeholder.com/600?text=Coffee+Maker",
+        image: placeholderImage(600, 600, "Coffee Maker"),
         stock: 40,
         rating: 4.1,
         reviews: 210,
@@ -103,7 +109,7 @@ const productsSeed = [
         price: 69.99,
         salePrice: 64.99,
         categorySlug: "home-kitchen",
-        image: "https://via.placeholder.com/600?text=Kitchen+Blender",
+        image: placeholderImage(600, 600, "Kitchen Blender"),
         stock: 18,
         rating: 4.0,
         reviews: 87,
@@ -120,7 +126,7 @@ const productsSeed = [
             "Soft and durable cotton t-shirt that fits well and looks great.",
         price: 19.99,
         categorySlug: "fashion",
-        image: "https://via.placeholder.com/600?text=Classic+T-Shirt",
+        image: placeholderImage(600, 600, "Classic T-Shirt"),
         stock: 100,
         rating: 4.6,
         reviews: 310,
@@ -137,7 +143,7 @@ const productsSeed = [
             "Comfortable sneakers designed for daily wear and long walks.",
         price: 59.99,
         categorySlug: "fashion",
-        image: "https://via.placeholder.com/600?text=Everyday+Sneakers",
+        image: placeholderImage(600, 600, "Everyday Sneakers"),
         stock: 35,
         rating: 4.3,
         reviews: 144,

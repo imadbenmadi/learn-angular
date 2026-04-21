@@ -76,9 +76,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
     onImageError(event: Event): void {
         const img = event.target as HTMLImageElement | null;
-        if (img) {
-            img.src = "https://via.placeholder.com/600?text=No+Image";
-        }
+        if (!img) return;
+
+        if (img.dataset["fallbackApplied"] === "1") return;
+        img.dataset["fallbackApplied"] = "1";
+
+        img.src = "/api/images/placeholder?w=600&h=600&text=No%20Image";
     }
 
     goBack(): void {

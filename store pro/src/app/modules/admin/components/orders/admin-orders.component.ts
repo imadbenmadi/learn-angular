@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ColDef, GridReadyEvent } from "ag-grid-community";
 import { Order, OrderStatus } from "../../../../models";
 import { OrderService } from "../../../../services/order.service";
 
@@ -13,6 +14,15 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
     orders: Order[] = [];
     isLoading = false;
     errorMessage: string | null = null;
+
+    columnDefs: ColDef[] = [];
+    defaultColDef: ColDef = {
+        resizable: true,
+        sortable: true,
+    };
+    context: any;
+
+    private gridApi: any;
 
     // Pagination
     currentPage = 1;
@@ -27,12 +37,83 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
     constructor(private orderService: OrderService) {}
 
     ngOnInit(): void {
+        this.context = { componentParent: this };
+        this.columnDefs = [
+            {
+                headerName: "Order",
+                flex: 1,
+                minWidth: 160,
+                valueGetter: (p: any) => p.data?.orderId || p.data?._id,
+            },
+            {
+                headerName: "Customer",
+                flex: 1,
+                minWidth: 180,
+                valueGetter: (p: any) => this.getUserEmail(p.data),
+            },
+            { headerName: "Status", field: "status", width: 140 },
+            {
+                headerName: "Total",
+                field: "totalAmount",
+                width: 140,
+                valueFormatter: (p: any) => `₹${p.value}`,
+            },
+            {
+                headerName: "Date",
+                field: "createdAt",
+                width: 160,
+                valueFormatter: (p: any) => {
+                    const v = p.value;
+                    const d = v ? new Date(v) : null;
+                    return d && !Number.isNaN(d.getTime())
+                        ? d.toLocaleDateString()
+                        : "-";
+                },
+            },
+            {
+                headerName: "Update",
+                width: 220,
+                cellRenderer: this.updateCellRenderer.bind(this),
+                sortable: false,
+            },
+        ];
+
         this.load();
     }
 
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    onGridReady(event: GridReadyEvent): void {
+        this.gridApi = event.api;
+        event.api.sizeColumnsToFit();
+    }
+
+    private updateCellRenderer(params: any): HTMLElement {
+        const select = document.createElement("select");
+        select.className = "";
+
+        const statuses: string[] =
+            params?.context?.componentParent?.statuses || [];
+
+        for (const s of statuses) {
+            const opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s;
+            if (params?.data?.status === s) {
+                opt.selected = true;
+            }
+            select.appendChild(opt);
+        }
+
+        select.addEventListener("change", (e) => {
+            const value = (e.target as HTMLSelectElement).value;
+            params?.context?.componentParent?.updateStatus(params.data, value);
+        });
+
+        return select;
     }
 
     load(): void {
@@ -96,6 +177,7 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: () => {
                     order.status = status as any;
+                    this.gridApi?.refreshCells({ force: true });
                 },
                 error: (err) => {
                     this.errorMessage =
